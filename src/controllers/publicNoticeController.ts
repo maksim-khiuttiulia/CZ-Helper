@@ -1,6 +1,6 @@
 import Controller from "./controller";
 import {Request, Response} from "express";
-import PublicNoticePageParser from "../services/publicNoticePageParser"
+import PublicNoticePageParser from "../services/publicnotice/publicNoticePageParser"
 
 const PATH = '/notice'
 export default class PublicNoticeController extends Controller {

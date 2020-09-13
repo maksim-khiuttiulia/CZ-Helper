@@ -1,8 +1,8 @@
-import {PublicNotice} from "../domain/publicNotice";
-import PageLoader from "../services/pageLoader";
+import {PublicNotice} from "../../domain/publicNotice";
+import PageLoader from "../../utils/pageLoader";
 import BeautifulDom from "beautiful-dom";
 import HTMLElementData from "beautiful-dom/dist/htmlelement";
-import {NAME_LINE_SPLIT_CHAR, NOTICE_NUMBER_LINE_SPLIT_CHAR, PUBLIC_NOTICE_URL} from "../config/publicNoticeConstants";
+import {NAME_LINE_SPLIT_CHAR, NOTICE_NUMBER_LINE_SPLIT_CHAR, PUBLIC_NOTICE_URL} from "./publicNoticeConstants";
 
 
 class PublicNoticePageParser {
