@@ -18,5 +18,12 @@ export class PublicNotice {
     @Column()
     noticeNumber : string | undefined;
 
+    @Column()
+    valid : boolean = true;
 
+
+    constructor(fullName: string | undefined, noticeNumber: string | undefined) {
+        this.fullName = fullName;
+        this.noticeNumber = noticeNumber;
+    }
 }
