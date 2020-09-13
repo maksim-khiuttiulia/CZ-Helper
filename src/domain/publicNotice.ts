@@ -16,7 +16,7 @@ export class PublicNotice {
     fullName : string | undefined;
 
     @Column()
-    caseNumber : string | undefined;
+    noticeNumber : string | undefined;
 
 
 }

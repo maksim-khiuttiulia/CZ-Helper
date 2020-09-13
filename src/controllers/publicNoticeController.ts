@@ -1,5 +1,7 @@
 import Controller from "./controller";
 import {Request, Response} from "express";
+import {PUBLIC_NOTICE_URL} from "../config/urlConstants";
+import PublicNoticePageParser from "../services/publicNoticePageParser"
 
 const PATH = '/notice'
 export default class PublicNoticeController extends Controller {
@@ -16,6 +18,12 @@ export default class PublicNoticeController extends Controller {
 
 
     getAllNotices(request: Request, response: Response) : void {
-        response.send("Here will be notices");
+        PublicNoticePageParser.readNoticesOnPage(PUBLIC_NOTICE_URL).then(data => {
+            response.send("data");
+        }).catch(reason => {
+            response.send("reason")
+       })
     }
+
+
 }
