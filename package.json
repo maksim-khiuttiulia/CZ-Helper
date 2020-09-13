@@ -1,0 +1,25 @@
+{
+  "name": "mvcr_checker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc-watch --onSuccess \"node ./dist/server.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maksim-khiuttiulia/MVCRChecker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maksim-khiuttiulia/MVCRChecker/issues"
+  },
+  "homepage": "https://github.com/maksim-khiuttiulia/MVCRChecker#readme",
+  "dependencies": {
+    "tsc-watch": "^4.2.9",
+    "typescript": "^4.0.2"
+  }
+}
