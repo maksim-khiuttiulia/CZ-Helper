@@ -1,28 +1,31 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Table} from "typeorm";
 
-@Entity()
+@Entity('PUBLIC_NOTICE')
 export class PublicNotice {
 
     @PrimaryGeneratedColumn()
     id : number | undefined;
 
-    @CreateDateColumn({type : "timestamp"})
+    @CreateDateColumn({name : "created_at",type : "timestamp"})
     createdAt : string | undefined;
 
-    @UpdateDateColumn({type : "timestamp"})
+    @UpdateDateColumn({name : "updated_at", type : "timestamp"})
     updatedAt : string | undefined;
 
-    @Column()
-    fullName : string | undefined;
+    @Column({name : "full_name"})
+    fullName : string;
 
-    @Column()
-    noticeNumber : string | undefined;
+    @Column({name : "notice_number"})
+    noticeNumber : string;
 
     @Column()
     valid : boolean = true;
 
+    @Column()
+    expired : boolean = false
 
-    constructor(fullName: string | undefined, noticeNumber: string | undefined) {
+
+    constructor(fullName: string, noticeNumber: string) {
         this.fullName = fullName;
         this.noticeNumber = noticeNumber;
     }
