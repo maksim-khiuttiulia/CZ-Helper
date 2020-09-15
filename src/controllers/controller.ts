@@ -16,8 +16,4 @@ export default abstract class Controller {
     get router() : Router {
         return this._router;
     }
-
-    protected ping(request: Request, response: Response){
-        response.send("Pong");
-    }
 }

@@ -2,7 +2,12 @@ import {PublicNotice} from "../../domain/publicNotice";
 import PageLoader from "../../utils/pageLoader";
 import BeautifulDom from "beautiful-dom";
 import HTMLElementData from "beautiful-dom/dist/htmlelement";
-import {NAME_LINE_SPLIT_CHAR, NOTICE_NUMBER_LINE_SPLIT_CHAR, PUBLIC_NOTICE_URL} from "./publicNoticeConstants";
+import {
+    NAME_LINE_REGEX,
+    NAME_LINE_REGEX_GROUP,
+    NOTICE_NUMBER_LINE_REGEX, NOTICE_NUMBER_LINE_REGEX_GROUP, PUBLIC_NOTICE_ARTICLE_URL_PREFIX,
+    PUBLIC_NOTICE_URL
+} from "./publicNoticeConstants";
 
 
 class PublicNoticePageParser {
@@ -29,12 +34,16 @@ class PublicNoticePageParser {
     }
 
     public async parseNoticesOnPage(dom : BeautifulDom) : Promise<PublicNotice[]> {
+
         let noticeArray : PublicNotice[] = [];
         let articles : HTMLElementData[] = dom.getElementsByClassName('article');
+
         for (const article of articles){
             let name = this.parseNameLine(article);
             let noticeNumber = this.parseNoticeNumberLine(article);
+            let url = this.parseUrl(article);
             let notice : PublicNotice = new PublicNotice(name, noticeNumber);
+            notice.url = url;
             if (!name || !noticeNumber) {
                 notice.valid = false;
             }
@@ -47,28 +56,35 @@ class PublicNoticePageParser {
     private parseNameLine(element : HTMLElementData) : string {
         let name = '';
         let nameLine : HTMLElementData[] = element.getElementsByTagName('a');
+
         if (nameLine.length === 1) {
-            let nameLineText : string = nameLine[0].innerText;
-            let split : string[] = nameLineText.split(NAME_LINE_SPLIT_CHAR);
-            if (split.length === 2){
-                name = split[1].trim();
+            let parsed : RegExpMatchArray | null = nameLine[0].innerText.match(NAME_LINE_REGEX);
+            if (parsed != null) {
+                name = parsed[NAME_LINE_REGEX_GROUP];
             }
         }
+
         return name;
+    }
+
+    private parseUrl(element : HTMLElementData) : string {
+        let urlLine : HTMLElementData[] = element.getElementsByTagName('a');
+
+        if (urlLine.length !== 1 || urlLine[0].getAttribute("href") === null) {
+            return '';
+        }
+
+
+        return PUBLIC_NOTICE_ARTICLE_URL_PREFIX + urlLine[0].getAttribute("href");
     }
 
     private parseNoticeNumberLine(element : HTMLElementData) : string {
         let noticeNumber = '';
         let noticeNumberLine = element.getElementsByTagName('p');
         if (noticeNumberLine.length === 1) {
-            let noticeNumberText : string = noticeNumberLine[0].innerText;
-            let split : string[] = noticeNumberText.split(NOTICE_NUMBER_LINE_SPLIT_CHAR);
-            if (split.length === 2){
-                noticeNumber = NOTICE_NUMBER_LINE_SPLIT_CHAR + split[1].trim();
-            }
-            if (split.length > 2) {
-                split = split.splice(0, 1);
-                noticeNumber = NOTICE_NUMBER_LINE_SPLIT_CHAR + split.join('');
+            let parsed = noticeNumberLine[0].innerText.match(NOTICE_NUMBER_LINE_REGEX);
+            if (parsed != null) {
+                noticeNumber = parsed[NOTICE_NUMBER_LINE_REGEX_GROUP];
             }
         }
         return noticeNumber;

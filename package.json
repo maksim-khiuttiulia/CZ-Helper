@@ -5,6 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
+    "debug_win": "tsc-watch --onSuccess \"set DEBUG=* & node ./dist/server.js\"",
     "build": "tsc",
     "start_beget": "npm run build && touch tmp/restart.txt"
   },

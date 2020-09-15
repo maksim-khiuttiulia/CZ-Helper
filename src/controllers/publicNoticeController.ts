@@ -1,10 +1,9 @@
 import Controller from "./controller";
 import {Request, Response} from "express";
-import PublicNoticePageParser from "../services/publicnotice/publicNoticePageParser"
-import PublicNoticeService from "../services/publicnotice/publicNoticeService";
+import PublicNoticeService from "../services/publicnotice/publicNoticeService"
 
 const PATH = '/notice'
-export default class PublicNoticeController extends Controller {
+class PublicNoticeController extends Controller {
 
 
     constructor() {
@@ -12,23 +11,17 @@ export default class PublicNoticeController extends Controller {
     }
 
     protected initializeRoutes(): void {
-        this.router.get(this._path, this.getAllNotices)
-        this.router.get(this._path + "/ping", this.ping)
-        this.router.get(this._path + "/save", this.saveAllNotices)
+        this.router.get(this._path, this.update)
     }
 
 
-    getAllNotices(request: Request, response: Response) : void {
-        PublicNoticePageParser.readNotices().then(data => {
-            response.send(data);
+    update(request: Request, response: Response) : void {
+        PublicNoticeService.updateAllNotices().then(data => {
+            response.send("OK");
         }).catch(reason => {
             response.send(reason)
-       })
+        })
     }
-
-    saveAllNotices(request: Request, response: Response) : void {
-        PublicNoticeService.saveNotices();
-        response.send("OK")
-    }
-
 }
+
+export default new PublicNoticeController();
