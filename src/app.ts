@@ -3,6 +3,8 @@ import * as bodyParser from 'body-parser';
 import Controller from "./controllers/controller";
 import dotenv from "dotenv";
 import {createConnection} from "typeorm";
+import Logger from "./services/logger/logger"
+import winston from "winston";
 
 dotenv.config();
 let PORT: number = Number(process.env.SERVER_PORT);
