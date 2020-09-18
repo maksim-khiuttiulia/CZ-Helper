@@ -39,7 +39,7 @@ export default class App {
         this._app.use(bodyParser.json());
     }
 
-    private async initializeDBConnection() : Promise<void> {
+    private initializeDBConnection() : void {
         Logger.logInfo("Init DB Connection");
         createConnection({
             type : "mysql",
