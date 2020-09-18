@@ -3,6 +3,8 @@ import * as bodyParser from 'body-parser';
 import Controller from "./controllers/controller";
 import dotenv from "dotenv";
 import {createConnection} from "typeorm";
+import Jobs from "./config/jobs"
+import Logger from "./services/logger/logger";
 
 dotenv.config();
 let PORT: number = Number(process.env.SERVER_PORT);
@@ -18,16 +20,18 @@ export default class App {
     private readonly _port : number;
 
     constructor(controllers : Controller[]) {
+        Logger.logInfo("Start application")
         this._app = express();
         this._port = PORT;
         this.initializeMiddlewares();
         this.initializeDBConnection();
         this.initializeControllers(controllers);
+        this.initializeJobs();
     }
 
     public listen() : void {
         this._app.listen(this._port, () => {
-            console.log(`App listening on the port ${this._port}`);
+            Logger.logInfo(`App listening on the port ${this._port}`);
         });
     }
 
@@ -35,8 +39,8 @@ export default class App {
         this._app.use(bodyParser.json());
     }
 
-    private initializeDBConnection() : void {
-        console.warn(DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME)
+    private async initializeDBConnection() : Promise<void> {
+        Logger.logInfo("Init DB Connection");
         createConnection({
             type : "mysql",
             host : DB_HOST,
@@ -49,16 +53,21 @@ export default class App {
             ]
 
         }).then(connection => {
-            console.log("Connected to DB")
+            Logger.logInfo("Connected to DB")
         }).catch(e => {
-            console.error("Failed to connect to DB")
-            console.error(e)
+            Logger.logError("Failed to connect to DB")
+            Logger.logError(e)
         })
     }
 
     private initializeControllers(controllers : Controller[]) : void {
         controllers.forEach((controller) => {
             this._app.use('/', controller.router);
+            this._app.use('/', controller.router);
         });
+    }
+
+    private initializeJobs() : void {
+        Jobs.initUpdatePublicNotices();
     }
 }

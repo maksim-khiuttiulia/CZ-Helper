@@ -1,12 +1,13 @@
-import {Connection, getConnection, Repository} from "typeorm";
+import {getConnection, Repository} from "typeorm";
 import PublicNoticePageParser from "./publicNoticePageParser"
 import {PublicNotice} from "../../domain/publicNotice";
-import {isIn, isNotIn} from "../../utils/collectionUtils";
+import {isNotIn} from "../../utils/collectionUtils";
 import {FIRST_AND_LAST_NAME_REGEX, FIRST_NAME_REGEX_GROUP, LAST_NAME_REGEX_GROUP} from "./publicNoticeConstants";
-
+import Logger from "../../services/logger/logger"
 class PublicNoticeService {
 
     async updateAllNotices() : Promise<void> {
+        Logger.logInfo("Start updating public notices");
         let repository : Repository<PublicNotice> = getConnection().getRepository(PublicNotice);
         let fromDbNotices : PublicNotice[] = await repository.find()
 
@@ -31,8 +32,9 @@ class PublicNoticeService {
         expiredNotices = await repository.save(expiredNotices)
         newNotices = await repository.save(newNotices);
 
-        console.debug("Expired records:", expiredNotices.length);
-        console.debug("New records:", newNotices.length);
+        Logger.logInfo("End updating public notices");
+        Logger.logInfo("Expired records: " + expiredNotices.length);
+        Logger.logInfo("New records: " + newNotices.length);
     }
 
     private fillData(notice : PublicNotice) : PublicNotice {

@@ -1,19 +1,26 @@
-import winston, {createLogger, format, Logger as WinstonLogger, transports} from "winston";
+import {createLogger, format, Logger as WinstonLogger, transports} from "winston";
+import * as fs from "fs";
+
+const LOGS_PATH : string = "logs"
 
 class Logger {
-    private _infoLogger : WinstonLogger
-    private _errorLogger : WinstonLogger
+    private readonly _infoLogger : WinstonLogger
+    private readonly _errorLogger : WinstonLogger
 
     constructor() {
+        if (!fs.existsSync(LOGS_PATH)){
+            fs.mkdirSync(LOGS_PATH);
+        }
+
         this._infoLogger = createLogger({
             level : 'info',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.printf(info => `"{ timestamp" : "${info.timestamp}", "message" : "${info.message}", "stack" : "${info.stack} }"`.replace("\n", " "))
+                format.printf(info => `"{ timestamp" : "${info.timestamp}", "message" : "${info.message}" }`.replace("\n", " "))
             ),
             transports: [
                 new transports.Console(),
-                new transports.File({filename : 'logs/info.log'})
+                new transports.File({filename : LOGS_PATH +'/info.log'})
             ]
         });
 
@@ -26,7 +33,7 @@ class Logger {
             ),
             transports: [
                 new transports.Console(),
-                new transports.File({filename : 'logs/errors.log'})
+                new transports.File({filename : LOGS_PATH +'/errors.log'})
             ]
         });
     }
@@ -37,15 +44,6 @@ class Logger {
 
     logError(error : any) : void {
         this._errorLogger.error(error)
-    }
-
-
-    get infoLogger(): winston.Logger {
-        return this._infoLogger;
-    }
-
-    get errorLogger(): winston.Logger {
-        return this._errorLogger;
     }
 }
 
