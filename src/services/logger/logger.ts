@@ -29,7 +29,7 @@ class Logger {
             level : 'error',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.printf(info => `{ timestamp" : "${info.timestamp}", "message" : "${info.message}", "stack" : "${info.stack}", "config" : "${info.config}" }`.replace("\n", " "))
+                format.printf(info => `{ timestamp" : "${info.timestamp}", "message" : "${info.message}", "fullText" : "${JSON.stringify(info)}" }`.replace("\n", " "))
             ),
             transports: [
                 new transports.Console(),
