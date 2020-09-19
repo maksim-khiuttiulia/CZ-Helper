@@ -1,4 +1,4 @@
-create table public_notice
+create table PUBLIC_NOTICE
 (
     id               int auto_increment primary key,
     created_at       timestamp(6) default CURRENT_TIMESTAMP(6) not null,
@@ -14,7 +14,7 @@ create table public_notice
     url              varchar(255)                              null
 );
 
-create table application_status
+create table APPLICATION_STATUS
 (
     id                        int auto_increment primary key,
     created_at                timestamp(6) default CURRENT_TIMESTAMP(6) not null,
