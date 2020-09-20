@@ -34,6 +34,14 @@ class VkBotService {
             this._processMessagePayload(botPayload.object);
             return;
         }
+
+        if (botPayload.object?.text === "Добби помоги"){
+            this._markAsRead(botPayload.object)
+            let message = "Добрый день, я бот! Я соблюдаю первый закон робототехники (иногда)"
+            VkMessageService.sendGroupMessage(peerId, groupId, message, this._getBasicKeyboard())
+            return;
+        }
+
     }
 
     private _processMessagePayload(inputMessage : InputMessage) : void {
