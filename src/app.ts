@@ -68,6 +68,6 @@ export default class App {
     }
 
     private initializeJobs() : void {
-        Jobs.initUpdatePublicNotices();
+        //Jobs.initUpdatePublicNotices();
     }
 }

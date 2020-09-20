@@ -16,7 +16,7 @@ class Logger {
             level : 'info',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.printf(info => `{ timestamp" : "${info.timestamp}", "message" : "${info.message}" }`.replace("\n", " "))
+                format.json()
             ),
             transports: [
                 new transports.Console(),
@@ -29,7 +29,7 @@ class Logger {
             level : 'error',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.printf(info => `{ timestamp" : "${info.timestamp}", "message" : "${info.message}", "fullText" : "${JSON.stringify(info)}" }`.replace("\n", " "))
+                format.json()
             ),
             transports: [
                 new transports.Console(),
@@ -38,12 +38,12 @@ class Logger {
         });
     }
 
-    logInfo(info : string) : void {
+    logInfo(info : any) : void {
         this._infoLogger.info(info);
     }
 
-    logError(error : any) : void {
-        this._errorLogger.error(error)
+    logError(error : any, ...meta: any[]) : void {
+        this._errorLogger.error(error, meta)
     }
 }
 
