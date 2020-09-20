@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maksim-khiuttiulia/MVCRChecker.git"
+    "url": "git+https://github.com/maksim-khiuttiulia/CZ-Helper.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/maksim-khiuttiulia/MVCRChecker/issues"
+    "url": "https://github.com/maksim-khiuttiulia/CZ-Helper/issues"
   },
-  "homepage": "https://github.com/maksim-khiuttiulia/MVCRChecker#readme",
+  "homepage": "https://github.com/maksim-khiuttiulia/CZ-Helper#readme",
   "dependencies": {
     "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.7",
