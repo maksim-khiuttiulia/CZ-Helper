@@ -1,5 +1,5 @@
 import {Keyboard} from "../../payloads/vkBotPayloads";
-import {VkMessagePayload} from "../../payloads/vkApiPayloads";
+import {VkMarkAsReadPayload, VkMessagePayload} from "../../payloads/vkApiPayloads";
 import {VkApiMethod} from "../../enums/vkbotEnums";
 import VkApiService from "../../services/vk/vkApiService"
 
@@ -16,6 +16,15 @@ class VkMessageService {
         }
         VkApiService.callVkApi(VkApiMethod.SEND_MESSAGE, payload);
 
+    }
+
+    markAsRead(peerId : number, groupId:number) : void {
+        let payload : VkMarkAsReadPayload = {
+            peer_id : peerId,
+            group_id : groupId,
+            mark_conversation_as_read : 1
+        }
+        VkApiService.callVkApi(VkApiMethod.MARK_AS_READ, payload);
     }
 }
 

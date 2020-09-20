@@ -23,3 +23,16 @@ create table APPLICATION_STATUS
     status                    varchar(255)                              not null,
     final_value               tinyint                                   not null
 );
+
+
+create table czech_dictionary
+(
+    id            int auto_increment primary key,
+    original      varchar(100) not null,
+    transcription varchar(100) null,
+    translated    varchar(100) not null,
+    category      varchar(20)  not null,
+    type          varchar(20)  not null
+);
+
+

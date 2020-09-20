@@ -1,7 +1,7 @@
 import Controller from "./controller";
 import {Request, Response} from "express";
 import Logger from "../services/logger/logger"
-import VkBotService from "../services/vk/vkbotService"
+import VkBotService from "../services/vk/vkBotService"
 
 const PATH = "/vk"
 class VkBotController extends Controller{

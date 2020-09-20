@@ -22,8 +22,11 @@ class VkApiService {
         payload.v = VK_API_VERSION;
 
         const url = buildUrl(VK_API_ENDPOINT + method, payload);
-        console.error(url)
-        Axios.post(url, config).catch(reason => {
+        Axios.post(url, config).then(response => {
+            if (response.data.hasOwnProperty("error")){
+                Logger.logError(response.data)
+            }
+        }).catch(reason => {
             Logger.logError(reason)
         })
     }

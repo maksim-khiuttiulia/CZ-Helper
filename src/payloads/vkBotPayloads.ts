@@ -1,16 +1,16 @@
+import {ButtonColor, ButtonPayload} from "../enums/vkbotEnums";
 
 export interface VkBotPayload {
     type : 'message_new' | 'message' | 'confirmation',
     secret? : string,
     object? : InputMessage,
-    payload? : Payload,
     keyboard? : Keyboard
     group_id? : number,
 }
 
 export interface Payload {
     command? : 'start',
-    button? : string
+    button? : ButtonPayload
 }
 
 export interface InputMessage {
@@ -18,8 +18,8 @@ export interface InputMessage {
     date : number,
     out : number,
     user_id? : number,
-    peer_id? : number,
-    group_id? : number,
+    peer_id : number,
+    group_id : number,
     read_state : number,
     title : string,
     body : string,
@@ -35,7 +35,7 @@ export interface Keyboard {
 
 export interface KeyboardButton {
     action : KeyboardButtonAction,
-    color : 'primary' | 'secondary' | 'negative' | 'positive'
+    color : ButtonColor
 }
 
 export interface KeyboardButtonAction {

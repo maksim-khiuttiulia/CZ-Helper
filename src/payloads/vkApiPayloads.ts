@@ -12,3 +12,9 @@ export interface VkMessagePayload extends VkApiPayload {
     message : string
     keyboard? : Keyboard
 }
+
+export interface VkMarkAsReadPayload extends VkApiPayload {
+    peer_id? : number,
+    group_id? : number,
+    mark_conversation_as_read : number
+}
