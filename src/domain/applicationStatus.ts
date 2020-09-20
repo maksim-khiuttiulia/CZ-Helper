@@ -1,6 +1,6 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-import Domain from "../domain";
-import {StatusType} from "./statusType";
+import Domain from "./domain";
+import {ApplicationStatusType} from "../enums/applicationStatusType";
 
 @Entity('PUBLIC_NOTICE')
 export class ApplicationStatus extends Domain {
@@ -17,14 +17,14 @@ export class ApplicationStatus extends Domain {
     @Column({name : "application_number"})
     applicationNumber : string;
 
-    @Column({name : "status", type : "enum", enum : StatusType})
-    status : StatusType;
+    @Column({name : "status", type : "enum", enum : ApplicationStatusType})
+    status : ApplicationStatusType;
 
     @Column({name : "final_value"})
     finalValue : boolean = false
 
 
-    constructor(applicationNumber: string, status: StatusType) {
+    constructor(applicationNumber: string, status: ApplicationStatusType) {
         super();
         this.applicationNumber = applicationNumber;
         this.status = status;

@@ -15,8 +15,8 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_NOT_FOUND,
     STATUS_REJECTED
-} from "./applicationStatusConstants";
-import {StatusType} from "../../domain/applicationstatus/statusType";
+} from "../../constants/applicationStatusConstants";
+import {ApplicationStatusType} from "../../enums/applicationStatusType";
 
 interface OAMStatusNumber {
     number: string,
@@ -27,7 +27,7 @@ interface OAMStatusNumber {
 
 class ApplicationStatusPageParser {
 
-    async getApplicationStatus(number: string): Promise<StatusType> {
+    async getApplicationStatus(number: string): Promise<ApplicationStatusType> {
         if (this.isOAMNumber(number)) {
             let oamNumber: OAMStatusNumber = this.parseOAMNumber(number);
             return await this.getApplicationStatusOAM(oamNumber);
@@ -35,7 +35,7 @@ class ApplicationStatusPageParser {
         throw new Error("Unsuported");
     }
 
-    private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<StatusType> {
+    private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<ApplicationStatusType> {
         console.warn(oamNumber)
             const browser: Browser = await puppeteer.launch({headless: true});
             const page = await browser.newPage();
@@ -58,20 +58,20 @@ class ApplicationStatusPageParser {
             return this.findStatusOnPage(content);
     }
 
-    private findStatusOnPage(content: string): StatusType {
+    private findStatusOnPage(content: string): ApplicationStatusType {
         if (content.match(STATUS_APPROVED)) {
-            return StatusType.APPROVED;
+            return ApplicationStatusType.APPROVED;
         }
         if (content.match(STATUS_IN_PROGRESS)) {
-            return StatusType.IN_PROGRESS;
+            return ApplicationStatusType.IN_PROGRESS;
         }
         if (content.match(STATUS_NOT_FOUND)) {
-            return StatusType.NOT_FOUND;
+            return ApplicationStatusType.NOT_FOUND;
         }
         if (content.match(STATUS_REJECTED)) {
-            return StatusType.REJECTED;
+            return ApplicationStatusType.REJECTED;
         }
-        return StatusType.UNKNOWN;
+        return ApplicationStatusType.UNKNOWN;
     }
 
     private isOAMNumber(number: string): boolean {

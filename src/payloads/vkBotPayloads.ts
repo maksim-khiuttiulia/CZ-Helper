@@ -3,7 +3,7 @@ import {ButtonColor, ButtonPayload} from "../enums/vkbotEnums";
 export interface VkBotPayload {
     type : 'message_new' | 'message' | 'confirmation',
     secret? : string,
-    object? : InputMessage,
+    object : InputMessage,
     keyboard? : Keyboard
     group_id? : number,
 }

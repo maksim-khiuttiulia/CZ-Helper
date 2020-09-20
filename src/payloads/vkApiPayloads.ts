@@ -10,6 +10,7 @@ export interface VkMessagePayload extends VkApiPayload {
     group_id? : number,
     random_id : number,
     message : string
+    attachment? : string
     keyboard? : Keyboard
 }
 

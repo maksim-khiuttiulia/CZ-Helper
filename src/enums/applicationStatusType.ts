@@ -1,4 +1,4 @@
-export enum StatusType {
+export enum ApplicationStatusType {
     APPROVED = "APPROVED",
     REJECTED = "REJECTED",
     IN_PROGRESS = "IN_PROGRESS",

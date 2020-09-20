@@ -7,7 +7,7 @@ import {
     NAME_LINE_REGEX_GROUP,
     NOTICE_NUMBER_LINE_REGEX, NOTICE_NUMBER_LINE_REGEX_GROUP, PUBLIC_NOTICE_ARTICLE_URL_PREFIX,
     PUBLIC_NOTICE_URL
-} from "./publicNoticeConstants";
+} from "../../constants/publicNoticeConstants";
 
 
 class PublicNoticePageParser {
