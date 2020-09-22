@@ -2,8 +2,8 @@ import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColu
 import Domain from "../abstract/domain";
 import {ApplicationStatusType} from "./applicationStatusType";
 
-@Entity('PUBLIC_NOTICE')
-export class ApplicationStatus extends Domain {
+@Entity('APPLICATION_STATUS')
+export default class ApplicationStatus extends Domain {
 
     @PrimaryGeneratedColumn()
     id? : number;

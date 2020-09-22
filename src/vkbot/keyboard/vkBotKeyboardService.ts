@@ -83,7 +83,7 @@ class VkBotKeyboardService {
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Слово", ButtonPayload.WORD_RANDOM_WORD)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Фразы", ButtonPayload.GO_TO_PHRASES)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Полезные контакты", ButtonPayload.GO_TO_INFO)
-        builder.addButtonTextOnLine(ButtonColor.GREEN, "MVCR", ButtonPayload.MVCR_FUNCTIONS)
+        builder.addButtonTextOnLine(ButtonColor.GREEN, "Виза и письма", ButtonPayload.MVCR_FUNCTIONS)
         return builder.build(false, false);
     }
 

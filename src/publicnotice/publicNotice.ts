@@ -2,7 +2,7 @@ import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColu
 import Domain from "../abstract/domain";
 
 @Entity('PUBLIC_NOTICE')
-export class PublicNotice extends Domain {
+export default class PublicNotice extends Domain {
 
     @PrimaryGeneratedColumn()
     id? : number;

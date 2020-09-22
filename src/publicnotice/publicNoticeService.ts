@@ -1,6 +1,6 @@
 import {getConnection, Repository} from "typeorm";
 import PublicNoticePageParser from "./publicNoticePageParser"
-import {PublicNotice} from "./publicNotice";
+import PublicNotice from "./publicNotice";
 import {isNotIn} from "../utils/collectionUtils";
 import {FIRST_AND_LAST_NAME_REGEX, FIRST_NAME_REGEX_GROUP, LAST_NAME_REGEX_GROUP} from "./publicNoticeConstants";
 import Logger from "../logger/logger"
