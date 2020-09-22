@@ -42,7 +42,7 @@ export const VK_OUT_MVCR_EXISTS_PUBLIC_NOTICE: VkBotStaticMessage = {
 }
 
 export const VK_OUT_MVCR_NO_EXISTS_PUBLIC_NOTICE: VkBotStaticMessage = {
-    message : "Для тебя письмо!",
+    message : "Для тебя писем нет!",
     attachment : "photo-78133639_457241050"
 }
 

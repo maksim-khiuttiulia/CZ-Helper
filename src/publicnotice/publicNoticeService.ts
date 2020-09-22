@@ -38,9 +38,9 @@ class PublicNoticeService {
         Logger.logInfo("New records: " + newNotices.length);
     }
 
-    async getPublicNotices(firstName : string, lastName : string) : Promise<PublicNotice[]> {
+    async getActivePublicNotices(firstName : string, lastName : string) : Promise<PublicNotice[]> {
         let repository: Repository<PublicNotice> = getConnection().getRepository(PublicNotice);
-        return await repository.find({firstName: firstName.toUpperCase(), lastName: lastName.toUpperCase()});
+        return await repository.find({firstName: firstName.toUpperCase(), lastName: lastName.toUpperCase(), expired:false});
     }
 
 

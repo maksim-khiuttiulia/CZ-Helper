@@ -48,10 +48,10 @@ export default class App {
             password : DB_PASSWORD,
             database : DB_NAME,
             entities : [
-                "src/applicationstatus/applicationStatus.js",
-                "src/czechdictionary/czechDictionaryWord.js",
-                "src/publicnotice/publicNotice.js",
-                "src/usermessage/userMessage.js"
+                __dirname + "/applicationstatus/applicationStatus.js",
+                __dirname + "/czechdictionary/czechDictionaryWord.js",
+                __dirname + "/publicnotice/publicNotice.js",
+                __dirname + "/usermessage/userMessage.js"
             ]
         }).then(() => {
             Logger.logInfo("Connected to DB")
