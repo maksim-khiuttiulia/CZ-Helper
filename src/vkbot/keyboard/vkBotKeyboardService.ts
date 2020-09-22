@@ -4,7 +4,7 @@ import {WordCategory, WordType} from "../../czechdictionary/czechDictionaryEnums
 import VkMessageService from "../messages/vkMessageService";
 import CzechDictionaryWord from "../../czechdictionary/czechDictionaryWord";
 import VkKeyboardBuilder from "./vkKeyboardBuilder";
-import {VK_CHOOSE_CATEGORY, VK_UNKNOWN_COMMAND} from "../messages/staticMessage";
+import {VK_OUT_CHOOSE_CATEGORY, VK_OUT_MVCR_FUNCTIONS, VK_OUT_UNKNOWN_COMMAND} from "../messages/vkBotStaticMessage";
 import {ButtonColor} from "./vkKeyboardEnums";
 import {Keyboard} from "./vkKeyboardDataModel";
 
@@ -55,19 +55,23 @@ class VkBotKeyboardService {
 
         if (payload === ButtonPayload.GO_TO_PHRASES){
             keyboard = this.getPhraseKeyboard();
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_CHOOSE_CATEGORY.message, undefined, keyboard)
+            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
             return;
         }
         if (payload === ButtonPayload.GO_TO_INFO){
             keyboard = this.getInformationKeyboard()
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_CHOOSE_CATEGORY.message, undefined, keyboard)
+            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
             return;
+        }
+
+        if (payload === ButtonPayload.MVCR_FUNCTIONS){
+            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_MVCR_FUNCTIONS.message, VK_OUT_MVCR_FUNCTIONS.attachment, keyboard);
         }
 
 
 
         keyboard = this.getBasicKeyboard();
-        VkMessageService.sendGroupMessage(peerId, groupId, VK_UNKNOWN_COMMAND.message, VK_UNKNOWN_COMMAND.attachment, keyboard)
+        VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_UNKNOWN_COMMAND.message, VK_OUT_UNKNOWN_COMMAND.attachment, keyboard)
     }
 
     private _getFormattedWord(word : CzechDictionaryWord) : string {
@@ -79,6 +83,7 @@ class VkBotKeyboardService {
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Слово", ButtonPayload.WORD_RANDOM_WORD)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Фразы", ButtonPayload.GO_TO_PHRASES)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Полезные контакты", ButtonPayload.GO_TO_INFO)
+        builder.addButtonTextOnLine(ButtonColor.GREEN, "MVCR", ButtonPayload.MVCR_FUNCTIONS)
         return builder.build(false, false);
     }
 

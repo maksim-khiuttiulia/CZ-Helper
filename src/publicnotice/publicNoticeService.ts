@@ -4,6 +4,7 @@ import {PublicNotice} from "./publicNotice";
 import {isNotIn} from "../utils/collectionUtils";
 import {FIRST_AND_LAST_NAME_REGEX, FIRST_NAME_REGEX_GROUP, LAST_NAME_REGEX_GROUP} from "./publicNoticeConstants";
 import Logger from "../logger/logger"
+
 class PublicNoticeService {
 
     async updateAllNotices() : Promise<void> {
@@ -36,6 +37,12 @@ class PublicNoticeService {
         Logger.logInfo("Expired records: " + expiredNotices.length);
         Logger.logInfo("New records: " + newNotices.length);
     }
+
+    async getPublicNotices(firstName : string, lastName : string) : Promise<PublicNotice[]> {
+        let repository: Repository<PublicNotice> = getConnection().getRepository(PublicNotice);
+        return await repository.find({firstName: firstName.toUpperCase(), lastName: lastName.toUpperCase()});
+    }
+
 
     private fillData(notice : PublicNotice) : PublicNotice {
         let fullName : string = notice.fullName;

@@ -4,7 +4,7 @@ import Logger from "../../logger/logger"
 import VkBotService from "../vkBotService"
 import {VkBotPayload} from "../payloads/vkBotPayloads";
 
-const PATH = "/vkbot"
+const PATH = "/vk"
 const VK_SERVER_CONFIRMATION : string = String(process.env.VK_SERVER_CONFIRMATION);
 const VK_SERVER_RESPONSE : string = "ok";
 class VkApiController extends Controller{

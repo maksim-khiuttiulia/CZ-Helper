@@ -13,6 +13,8 @@ export enum ButtonPayload {
     INFO_TAXIS = "infoTaxis",
     INFO_JOBS = "infoJobs",
 
+    MVCR_FUNCTIONS = "mvcrFunctions",
+
     GO_TO_PHRASES = "goToPhases",
     GO_TO_INFO = "goToInformation",
     GO_TO_MAIN_MENU = "goToMainMenu"
