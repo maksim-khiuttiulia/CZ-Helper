@@ -1,6 +1,6 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-import Domain from "./domain";
-import {ApplicationStatusType} from "../enums/applicationStatusType";
+import Domain from "../abstract/domain";
+import {ApplicationStatusType} from "./applicationStatusType";
 
 @Entity('PUBLIC_NOTICE')
 export class ApplicationStatus extends Domain {
@@ -32,10 +32,8 @@ export class ApplicationStatus extends Domain {
 
     equals(another: ApplicationStatus): boolean {
         let o : ApplicationStatus = another as ApplicationStatus
-        if (this.applicationNumber === o.applicationNumber){
-            return true;
-        }
-        return false;
+        return this.applicationNumber === o.applicationNumber;
+
     }
 
 

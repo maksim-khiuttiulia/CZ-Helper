@@ -1,11 +1,12 @@
-import {ButtonColor, ButtonPayload} from "../../enums/vkbotEnums";
-import {Keyboard} from "../../payloads/vkBotPayloads";
-import CzechDictionaryService from "../czechdictionary/czechDictionaryService";
-import {WordCategory, WordType} from "../../enums/dictionaryEnums";
-import VkMessageService from "./vkMessageService";
-import DictionaryWord from "../../domain/dictionaryWord";
-import KeyboardBuilder from "./keyboardBuilder";
-import {VK_CHOOSE_CATEGORY, VK_UNKNOWN_COMMAND} from "../../constants/staticMessageContants";
+import {ButtonPayload} from "../vkbotEnums";
+import CzechDictionaryService from "../../czechdictionary/czechDictionaryService";
+import {WordCategory, WordType} from "../../czechdictionary/czechDictionaryEnums";
+import VkMessageService from "../messages/vkMessageService";
+import CzechDictionaryWord from "../../czechdictionary/czechDictionaryWord";
+import VkKeyboardBuilder from "./vkKeyboardBuilder";
+import {VK_CHOOSE_CATEGORY, VK_UNKNOWN_COMMAND} from "../messages/staticMessage";
+import {ButtonColor} from "./vkKeyboardEnums";
+import {Keyboard} from "./vkKeyboardDataModel";
 
 class VkBotKeyboardService {
 
@@ -69,12 +70,12 @@ class VkBotKeyboardService {
         VkMessageService.sendGroupMessage(peerId, groupId, VK_UNKNOWN_COMMAND.message, VK_UNKNOWN_COMMAND.attachment, keyboard)
     }
 
-    private _getFormattedWord(word : DictionaryWord) : string {
+    private _getFormattedWord(word : CzechDictionaryWord) : string {
         return word.original + " - " + word.transcription + " - " + word.translated;
     }
 
     getBasicKeyboard() : Keyboard {
-        let builder : KeyboardBuilder = new KeyboardBuilder();
+        let builder : VkKeyboardBuilder = new VkKeyboardBuilder();
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Слово", ButtonPayload.WORD_RANDOM_WORD)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Фразы", ButtonPayload.GO_TO_PHRASES)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Полезные контакты", ButtonPayload.GO_TO_INFO)
@@ -82,7 +83,7 @@ class VkBotKeyboardService {
     }
 
     getPhraseKeyboard() : Keyboard {
-        let builder : KeyboardBuilder = new KeyboardBuilder();
+        let builder : VkKeyboardBuilder = new VkKeyboardBuilder();
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Базовые", ButtonPayload.PHRASE_RANDOM_BASIC)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "В магазине", ButtonPayload.PHRASE_RANDOM_IN_SHOP)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "В транспорте", ButtonPayload.PHRASE_RANDOM_IN_TRANSPORT)
@@ -91,7 +92,7 @@ class VkBotKeyboardService {
     }
 
     getInformationKeyboard() : Keyboard {
-        let builder : KeyboardBuilder = new KeyboardBuilder();
+        let builder : VkKeyboardBuilder = new VkKeyboardBuilder();
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Экстренные телефоны", ButtonPayload.INFO_EMERGENCY_PHONES)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Скидки и цены", ButtonPayload.INFO_SALES_IN_SHOPS)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Аренда жилья и авто", ButtonPayload.INFO_RENT)

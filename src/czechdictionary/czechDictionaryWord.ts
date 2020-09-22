@@ -1,9 +1,9 @@
-import Domain from "./domain";
+import Domain from "../abstract/domain";
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {WordCategory, WordType} from "../enums/dictionaryEnums";
+import {WordCategory, WordType} from "./czechDictionaryEnums";
 
 @Entity('CZECH_DICTIONARY')
-export default class DictionaryWord extends Domain {
+export default class CzechDictionaryWord extends Domain {
 
     @PrimaryGeneratedColumn()
     id? : number;
@@ -24,7 +24,7 @@ export default class DictionaryWord extends Domain {
     type? : WordType
 
 
-    equals(another: DictionaryWord): boolean {
+    equals(another: CzechDictionaryWord): boolean {
         return another.original?.toUpperCase() === this.original?.toUpperCase();
     }
 

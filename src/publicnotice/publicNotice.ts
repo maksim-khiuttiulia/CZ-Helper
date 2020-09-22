@@ -1,5 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Table} from "typeorm";
-import Domain from "./domain";
+import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import Domain from "../abstract/domain";
 
 @Entity('PUBLIC_NOTICE')
 export class PublicNotice extends Domain {
@@ -49,10 +49,8 @@ export class PublicNotice extends Domain {
 
     equals(another: PublicNotice): boolean {
         let o : PublicNotice = another as PublicNotice
-        if (this.noticeNumber === o.noticeNumber){
-            return true;
-        }
-        return false;
+        return this.noticeNumber === o.noticeNumber;
+
     }
 
 

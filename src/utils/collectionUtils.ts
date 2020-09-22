@@ -1,4 +1,4 @@
-import Domain from "../domain/domain";
+import Domain from "../abstract/domain";
 
 export function isIn<T extends Domain>(object : T, collection : T[]) : boolean {
     for (let o of collection){

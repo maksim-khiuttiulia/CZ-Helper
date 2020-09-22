@@ -1,8 +1,7 @@
-import {VkApiMethod} from "../../enums/vkbotEnums";
+import {VkApiMethod} from "../vkbotEnums";
 import Axios, {AxiosRequestConfig} from "axios";
-import Logger from "../logger/logger";
-import {VkApiPayload} from "../../payloads/vkApiPayloads";
-import {stringify} from "querystring";
+import Logger from "../../logger/logger";
+import {VkApiPayload} from "../payloads/vkApiPayloads";
 import {buildUrl} from "../../utils/urlUtils";
 
 const VK_API_ENDPOINT : string = "https://api.vk.com/method/";

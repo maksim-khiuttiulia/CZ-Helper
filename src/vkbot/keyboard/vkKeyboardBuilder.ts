@@ -1,8 +1,9 @@
-import {Keyboard, KeyboardButton} from "../../payloads/vkBotPayloads";
-import {ButtonColor, ButtonPayload} from "../../enums/vkbotEnums";
+import {ButtonPayload} from "../vkbotEnums";
+import {ButtonColor} from "./vkKeyboardEnums";
+import {Keyboard, KeyboardButton} from "./vkKeyboardDataModel";
 
 
-class KeyboardBuilder {
+class VkKeyboardBuilder {
     private _buttonsLines : KeyboardButton[][] = []
     private _currentLine : number = -1
 
@@ -40,4 +41,4 @@ class KeyboardBuilder {
 
 }
 
-export default KeyboardBuilder
+export default VkKeyboardBuilder

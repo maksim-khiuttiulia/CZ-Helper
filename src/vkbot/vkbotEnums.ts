@@ -23,9 +23,3 @@ export enum VkApiMethod {
     MARK_AS_READ = "messages.markAsRead"
 }
 
-export enum ButtonColor {
-    GRAY = 'primary',
-    SECONDARY = 'secondary',
-    GREEN =  'positive',
-    RED = 'negative'
-}

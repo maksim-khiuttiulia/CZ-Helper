@@ -1,9 +1,9 @@
-import {Keyboard} from "../../payloads/vkBotPayloads";
-import {VkMarkAsReadPayload, VkMessagePayload} from "../../payloads/vkApiPayloads";
-import {VkApiMethod} from "../../enums/vkbotEnums";
-import VkApiService from "../../services/vk/vkApiService"
-import VkBotKeyboardService from "./vkBotKeyboardService";
-import {VK_WAKE_UP_MESSAGE_RU, VK_WELCOME_MESSAGE_RU} from "../../constants/staticMessageContants";
+import {VkMarkAsReadPayload, VkMessagePayload} from "../payloads/vkApiPayloads";
+import {VkApiMethod} from "../vkbotEnums";
+import VkApiService from "../api/vkApiService"
+import VkBotKeyboardService from "../keyboard/vkBotKeyboardService";
+import {VK_WAKE_UP_MESSAGE_RU, VK_WELCOME_MESSAGE_RU} from "./staticMessage";
+import {Keyboard} from "../keyboard/vkKeyboardDataModel";
 
 
 class VkMessageService {

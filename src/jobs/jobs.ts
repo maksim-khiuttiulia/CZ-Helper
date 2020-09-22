@@ -1,7 +1,7 @@
 import {schedule} from "node-cron";
 import {UPDATE_NOTICES_SCHEDULE} from "./jobsSchedules";
-import Logger from "../services/logger/logger"
-import PublicNoticeService from "../services/publicnotice/publicNoticeService"
+import Logger from "../logger/logger"
+import PublicNoticeService from "../publicnotice/publicNoticeService"
 
 class Jobs {
     initUpdatePublicNotices() : void {

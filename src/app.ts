@@ -1,10 +1,9 @@
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import Controller from "./controllers/controller";
+import Controller from "./abstract/controller";
 import dotenv from "dotenv";
 import {createConnection} from "typeorm";
-import Jobs from "./config/jobs"
-import Logger from "./services/logger/logger";
+import Logger from "./logger/logger";
 
 dotenv.config();
 let PORT: number = Number(process.env.SERVER_PORT);
@@ -42,17 +41,13 @@ export default class App {
     private initializeDBConnection() : void {
         Logger.logInfo("Init DB Connection");
         createConnection({
-            type : "mysql",
+            type : DB_TYPE,
             host : DB_HOST,
             port : DB_PORT,
             username : DB_USER,
             password : DB_PASSWORD,
             database : DB_NAME,
-            entities : [
-                __dirname + "/domain/*.js"
-            ]
-
-        }).then(connection => {
+        }).then(() => {
             Logger.logInfo("Connected to DB")
         }).catch(e => {
             Logger.logError("Failed to connect to DB")

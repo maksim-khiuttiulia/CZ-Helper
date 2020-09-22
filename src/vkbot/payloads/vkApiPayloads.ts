@@ -1,4 +1,4 @@
-import {Keyboard} from "./vkBotPayloads";
+import {Keyboard} from "../keyboard/vkKeyboardDataModel";
 
 export interface VkApiPayload {
     access_token? : string,

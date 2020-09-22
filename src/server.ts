@@ -1,8 +1,6 @@
 import App from './app'
-import PublicNoticeController from "./controllers/publicNoticeController";
-import VkBotController from "./controllers/vkBotController"
+import VkBotController from "./vkbot/api/vkApiController"
 const app = new App([
-        PublicNoticeController,
         VkBotController
     ])
 

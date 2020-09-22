@@ -1,9 +1,10 @@
-import {ButtonColor, ButtonPayload} from "../enums/vkbotEnums";
+import {ButtonPayload} from "../vkbotEnums";
+import {Keyboard} from "../keyboard/vkKeyboardDataModel";
 
 export interface VkBotPayload {
     type : 'message_new' | 'message' | 'confirmation',
     secret? : string,
-    object : InputMessage,
+    object : Message,
     keyboard? : Keyboard
     group_id? : number,
 }
@@ -13,7 +14,7 @@ export interface Payload {
     button? : ButtonPayload
 }
 
-export interface InputMessage {
+export interface Message {
     id : number,
     date : number,
     out : number,
@@ -27,19 +28,3 @@ export interface InputMessage {
     payload : string // Fucking VK API
 }
 
-export interface Keyboard {
-    one_time : boolean,
-    buttons : KeyboardButton[][]
-    inline : boolean
-}
-
-export interface KeyboardButton {
-    action : KeyboardButtonAction,
-    color : ButtonColor
-}
-
-export interface KeyboardButtonAction {
-    type : 'text',
-    label : string,
-    payload? : Payload
-}

@@ -1,5 +1,5 @@
-import {PublicNotice} from "../../domain/publicNotice";
-import PageLoader from "../../utils/pageLoader";
+import {PublicNotice} from "./publicNotice";
+import PageLoader from "../utils/pageLoader";
 import BeautifulDom from "beautiful-dom";
 import HTMLElementData from "beautiful-dom/dist/htmlelement";
 import {
@@ -7,7 +7,7 @@ import {
     NAME_LINE_REGEX_GROUP,
     NOTICE_NUMBER_LINE_REGEX, NOTICE_NUMBER_LINE_REGEX_GROUP, PUBLIC_NOTICE_ARTICLE_URL_PREFIX,
     PUBLIC_NOTICE_URL
-} from "../../constants/publicNoticeConstants";
+} from "./publicNoticeConstants";
 
 
 class PublicNoticePageParser {

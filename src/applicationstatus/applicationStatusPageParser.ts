@@ -15,8 +15,8 @@ import {
     STATUS_IN_PROGRESS,
     STATUS_NOT_FOUND,
     STATUS_REJECTED
-} from "../../constants/applicationStatusConstants";
-import {ApplicationStatusType} from "../../enums/applicationStatusType";
+} from "./applicationStatusConstants";
+import {ApplicationStatusType} from "./applicationStatusType";
 
 interface OAMStatusNumber {
     number: string,

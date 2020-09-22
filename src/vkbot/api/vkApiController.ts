@@ -1,13 +1,13 @@
-import Controller from "./controller";
+import Controller from "../../abstract/controller";
 import {Request, Response} from "express";
-import Logger from "../services/logger/logger"
-import VkBotService from "../services/vk/vkBotService"
+import Logger from "../../logger/logger"
+import VkBotService from "../vkBotService"
 import {VkBotPayload} from "../payloads/vkBotPayloads";
 
-const PATH = "/vk"
+const PATH = "/vkbot"
 const VK_SERVER_CONFIRMATION : string = String(process.env.VK_SERVER_CONFIRMATION);
 const VK_SERVER_RESPONSE : string = "ok";
-class VkBotController extends Controller{
+class VkApiController extends Controller{
 
 
     constructor() {
@@ -30,4 +30,4 @@ class VkBotController extends Controller{
     }
 }
 
-export default new VkBotController();
+export default new VkApiController();
