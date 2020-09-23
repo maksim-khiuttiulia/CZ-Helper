@@ -17,11 +17,14 @@ export enum ButtonPayload {
 
     GO_TO_PHRASES = "goToPhases",
     GO_TO_INFO = "goToInformation",
-    GO_TO_MAIN_MENU = "goToMainMenu"
+    GO_TO_MAIN_MENU = "goToMainMenu",
+
+    WHO_AM_I = "whoAmI"
 }
 
 export enum VkApiMethod {
     SEND_MESSAGE= "messages.send",
-    MARK_AS_READ = "messages.markAsRead"
+    MARK_AS_READ = "messages.markAsRead",
+    GET_USER = "users.get"
 }
 

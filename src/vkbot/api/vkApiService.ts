@@ -30,6 +30,25 @@ class VkApiService {
         })
     }
 
+    async callVkApiWithResponse(method : VkApiMethod, payload : VkApiPayload) : Promise<any> {
+        const config : AxiosRequestConfig = {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        }
+        payload.access_token = VK_ACCESS_TOKEN;
+        payload.v = VK_API_VERSION;
+
+        const url = buildUrl(VK_API_ENDPOINT + method, payload);
+        try {
+            let response =  await Axios.post(url, config);
+            return response.data;
+        } catch (e) {
+            Logger.logError(e);
+            throw e;
+        }
+    }
+
 }
 
 export default new VkApiService();

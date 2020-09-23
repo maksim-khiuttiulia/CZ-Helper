@@ -1,7 +1,7 @@
 import {VkMarkAsReadPayload, VkMessagePayload} from "../payloads/vkApiPayloads";
 import {VkApiMethod} from "../vkbotEnums";
 import VkApiService from "../api/vkApiService"
-import VkBotKeyboardService from "../keyboard/vkBotKeyboardService";
+import PreparedKeyboardService from "../keyboard/preparedKeyboardService"
 import {
     VK_OUT_UNKNOWN_COMMAND,
     VK_OUT_WAKE_UP_MESSAGE_RU,
@@ -23,7 +23,7 @@ class VkMessageService {
             attachment : attachment
         }
         if (!payload.keyboard){
-            payload.keyboard = VkBotKeyboardService.getBasicKeyboard();
+            payload.keyboard = PreparedKeyboardService.getBasicKeyboard();
         }
         VkApiService.callVkApi(VkApiMethod.SEND_MESSAGE, payload);
     }
@@ -41,8 +41,7 @@ class VkMessageService {
     sendWelcomeMessage(peerId : number, groupId : number) : void {
         let message : string = VK_OUT_WELCOME_MESSAGE_RU.message
         let attachment : string | undefined = VK_OUT_WELCOME_MESSAGE_RU.attachment
-        let keyboard : Keyboard = VkBotKeyboardService.getBasicKeyboard();
-        this.sendGroupMessage(peerId, groupId, message, attachment, keyboard)
+        this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -50,7 +49,7 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_WAKE_UP_MESSAGE_RU.message
         let attachment : string | undefined = VK_OUT_WAKE_UP_MESSAGE_RU.attachment;
-        let keyboard : Keyboard = VkBotKeyboardService.getBasicKeyboard();
+        let keyboard : Keyboard = PreparedKeyboardService.getBasicKeyboard();
         keyboard.inline = true;
 
         this.sendGroupMessage(peerId, groupId, message, attachment, keyboard)
@@ -61,9 +60,7 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_UNKNOWN_COMMAND.message
         let attachment : string | undefined = VK_OUT_UNKNOWN_COMMAND.attachment;
-        let keyboard : Keyboard = VkBotKeyboardService.getBasicKeyboard();
-
-        this.sendGroupMessage(peerId, groupId, message, attachment, keyboard)
+        this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -71,9 +68,8 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_WRONG_FORMAT.message
         let attachment : string | undefined = VK_OUT_WRONG_FORMAT.attachment;
-        let keyboard : Keyboard = VkBotKeyboardService.getBasicKeyboard();
 
-        this.sendGroupMessage(peerId, groupId, message, attachment, keyboard)
+        this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 }

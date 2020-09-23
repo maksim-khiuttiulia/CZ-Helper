@@ -19,6 +19,7 @@ export interface Message {
     date : number,
     out : number,
     user_id? : number,
+    from_id? : number,
     peer_id : number,
     group_id : number,
     read_state : number,

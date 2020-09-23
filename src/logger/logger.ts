@@ -40,7 +40,7 @@ class Logger {
 
         this._requestLogger = createLogger({
             handleExceptions : true,
-            level : 'error',
+            level : 'info',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
                 format.json()

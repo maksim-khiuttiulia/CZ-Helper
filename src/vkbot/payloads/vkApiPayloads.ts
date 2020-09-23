@@ -19,3 +19,8 @@ export interface VkMarkAsReadPayload extends VkApiPayload {
     group_id? : number,
     mark_conversation_as_read : number
 }
+
+export interface VkUsersPayload extends VkApiPayload {
+    user_ids : string,
+    fields : string
+}
