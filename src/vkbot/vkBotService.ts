@@ -2,10 +2,10 @@ import {Message, Payload, VkBotPayload} from "./payloads/vkBotPayloads";
 import Logger from "../logger/logger"
 import VkMessageService from "./messages/vkMessageService"
 import VkBotKeyboardService from "./keyboard/vkBotKeyboardService";
-import {isMatch} from "../utils/regexUtils";
+import {isMatch, isMatchInUpperCase} from "../utils/regexUtils";
 import VkVisaService from "./vkVisaService"
 import {
-    VK_IN_CHECK_PUBLIC_NOTICE_REGEX, VK_IN_CHECK_VISA_REGEX,
+    VK_IN_CHECK_PUBLIC_NOTICE_REGEX, VK_IN_CHECK_VISA_REGEX, VK_IN_MESSAGE_PREFIX_REGEX,
     VK_IN_WAKE_UP_REGEX
 } from "./vkInputMessagePatterns";
 
@@ -22,24 +22,26 @@ class VkBotService {
             return
         }
 
-        if (inputMessage.text){
+        if (inputMessage.text && isMatchInUpperCase(inputMessage.text, VK_IN_MESSAGE_PREFIX_REGEX)){
             this._processMessageText(inputMessage)
             return;
         }
     }
 
     private _processMessageText(inputMessage : Message) : void {
-        if (isMatch(inputMessage.text, VK_IN_WAKE_UP_REGEX)){
+        inputMessage.text = inputMessage.text.toUpperCase();
+        let text = inputMessage.text.toUpperCase();
+        if (isMatch(text, VK_IN_WAKE_UP_REGEX)){
             this._markAsRead(inputMessage)
             VkMessageService.sendWakeupMessage(inputMessage.peer_id, inputMessage.group_id);
             return
         }
-        if (isMatch(inputMessage.text, VK_IN_CHECK_PUBLIC_NOTICE_REGEX)) {
+        if (isMatch(text, VK_IN_CHECK_PUBLIC_NOTICE_REGEX)) {
             this._markAsRead(inputMessage)
             VkVisaService.processGetPublicNoticeMessage(inputMessage);
             return;
         }
-        if (isMatch(inputMessage.text, VK_IN_CHECK_VISA_REGEX)) {
+        if (isMatch(text, VK_IN_CHECK_VISA_REGEX)) {
             this._markAsRead(inputMessage)
             VkVisaService.processGetVisaStatus(inputMessage);
             return;

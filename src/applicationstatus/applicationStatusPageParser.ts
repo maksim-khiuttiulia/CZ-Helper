@@ -17,6 +17,7 @@ import {
     STATUS_REJECTED
 } from "./applicationStatusConstants";
 import {ApplicationStatusType} from "./applicationStatusType";
+import Logger from "../logger/logger"
 
 interface OAMStatusNumber {
     number: string,
