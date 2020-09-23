@@ -14,6 +14,11 @@ export const VK_OUT_WAKE_UP_MESSAGE_RU : VkBotStaticMessage = {
     attachment : "photo-78133639_457241049"
 }
 
+export const VK_OUT_WAIT : VkBotStaticMessage = {
+    message : "Выполняю, немного подожди",
+}
+
+
 export const VK_OUT_ERROR: VkBotStaticMessage = {
     message : "Упс, что то случилось, что то очень темное, сообщи об ошибке моему хозяину",
     attachment : "photo-78133639_457241050"

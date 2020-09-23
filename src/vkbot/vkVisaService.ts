@@ -52,6 +52,8 @@ class VkVisaService {
         }
         let visaNumber : string = regex[VK_IN_CHECK_VISA_NUMBER_GROUP];
 
+        VkMessageService.sendWaitMessage(inputMessage.peer_id, inputMessage.group_id);
+
         ApplicationStatusVisa.getVisaStatus(visaNumber).then(status => {
             let message = this._getFormattedMessageVisaStatus(status);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
