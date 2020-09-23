@@ -21,6 +21,10 @@ class ApplicationStatusService {
         }
     }
 
+    async getVisaStatus(visaNumber : string) : Promise<ApplicationStatusType> {
+        return await ApplicationStatusPageParser.getApplicationStatus(visaNumber);
+    }
+
     private async _notifyUser(status : ApplicationStatus) : Promise<void> {
 
     }

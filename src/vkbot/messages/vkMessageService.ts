@@ -22,6 +22,9 @@ class VkMessageService {
             keyboard : keyboard,
             attachment : attachment
         }
+        if (!payload.keyboard){
+            payload.keyboard = VkBotKeyboardService.getBasicKeyboard();
+        }
         VkApiService.callVkApi(VkApiMethod.SEND_MESSAGE, payload);
     }
 

@@ -65,7 +65,8 @@ class VkBotKeyboardService {
         }
 
         if (payload === ButtonPayload.MVCR_FUNCTIONS){
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_MVCR_FUNCTIONS.message, VK_OUT_MVCR_FUNCTIONS.attachment, keyboard);
+            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_MVCR_FUNCTIONS.message, undefined, keyboard);
+            return;
         }
 
 

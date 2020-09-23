@@ -1,4 +1,4 @@
-import {PublicNotice} from "./publicNotice";
+import PublicNotice from "./publicNotice";
 import PageLoader from "../utils/pageLoader";
 import BeautifulDom from "beautiful-dom";
 import HTMLElementData from "beautiful-dom/dist/htmlelement";

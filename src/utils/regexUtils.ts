@@ -1,5 +1,5 @@
 
-export function isFullMatch(str : string, pattern : string) : boolean{
+export function isMatch(str : string, pattern : string) : boolean{
     return str.match(pattern) != null;
 }
 

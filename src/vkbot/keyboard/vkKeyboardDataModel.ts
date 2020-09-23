@@ -7,7 +7,7 @@ export interface KeyboardButton {
 }
 
 export interface KeyboardButtonAction {
-    type: 'text',
+    type: 'text' | 'callback',
     label: string,
     payload?: Payload
 }

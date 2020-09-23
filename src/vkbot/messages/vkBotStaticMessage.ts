@@ -14,6 +14,11 @@ export const VK_OUT_WAKE_UP_MESSAGE_RU : VkBotStaticMessage = {
     attachment : "photo-78133639_457241049"
 }
 
+export const VK_OUT_ERROR: VkBotStaticMessage = {
+    message : "Упс, что то случилось, что то очень темное, сообщи об ошибке моему хозяину",
+    attachment : "photo-78133639_457241050"
+}
+
 export const VK_OUT_UNKNOWN_COMMAND : VkBotStaticMessage = {
     message : "Упс, неизвестное заклинание",
     attachment : "photo-78133639_457241050"
@@ -31,8 +36,8 @@ export const VK_OUT_CHOOSE_CATEGORY : VkBotStaticMessage = {
 export const VK_OUT_MVCR_FUNCTIONS : VkBotStaticMessage = {
     message : "Вот что я умею:\n" +
         "\"Добби сова: ИМЯ ФАМИЛИЯ\" - проверка писем из минестерства магии\n" +
-        "\"Добби хогвартс: ABCD123456789\" - состояние билета в Хогвартс\n" +
-        "\"Добби хогсмит: OAM-12345/CC-YYYY\" - состояние билета в Хогсмит\n",
+        "\"Добби Хогвартс: ABCD123456789\" или \n \"Добби хогвартс: OAM-12345/CC-YYYY\" \n - состояние билета в Хогвартс\n" +
+        "Добби еще учится и может ошибаться",
     attachment : "photo-78133639_457241051"
 }
 
@@ -46,3 +51,22 @@ export const VK_OUT_MVCR_NO_EXISTS_PUBLIC_NOTICE: VkBotStaticMessage = {
     attachment : "photo-78133639_457241050"
 }
 
+export const VK_OUT_MVCR_VISA_APPROVED : VkBotStaticMessage = {
+    message : "Гарри Поттер едет в хогвартс!",
+    attachment : "photo-78133639_457241054"
+}
+
+export const VK_OUT_MVCR_VISA_REJECTED : VkBotStaticMessage = {
+    message : "Гарри Поттеру не дали билет в Хогвартс",
+    attachment : "photo-78133639_457241050"
+}
+
+export const VK_OUT_MVCR_VISA_IN_PROGRESS : VkBotStaticMessage = {
+    message : "Гарри Поттер еще ждет билет в Хогвартс",
+    attachment : "photo-78133639_457241050"
+}
+
+export const VK_OUT_MVCR_VISA_NOT_FOUND: VkBotStaticMessage = {
+    message : "Добби не смог найти информацию о билете",
+    attachment : "photo-78133639_457241050"
+}
