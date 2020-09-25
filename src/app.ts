@@ -7,7 +7,7 @@ import Logger from "./logger/logger";
 
 dotenv.config();
 let PORT: number = Number(process.env.SERVER_PORT);
-let DB_TYPE: "mysql" | "mariadb" = "mysql"
+let DB_TYPE: "postgres" = "postgres"
 let DB_HOST: string = String(process.env.DB_HOST);
 let DB_PORT: number = Number(process.env.DB_PORT);
 let DB_NAME: string = String(process.env.DB_NAME)
