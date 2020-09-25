@@ -7,7 +7,7 @@
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
     "debug_win": "tsc-watch --onSuccess \"set DEBUG=* & node ./dist/server.js\"",
     "build": "tsc",
-    "start_beget": "cp .env ./dist/.env & tsc"
+    "start": "tsc & cp .env ./dist/.env & pm2 ./dist/server.js"
   },
   "repository": {
     "type": "git",
