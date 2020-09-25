@@ -2,7 +2,7 @@ import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColu
 import Domain from "../abstract/domain";
 import {ApplicationStatusType} from "./applicationStatusType";
 
-@Entity('APPLICATION_STATUS')
+@Entity('application_status')
 export default class ApplicationStatus extends Domain {
 
     @PrimaryGeneratedColumn()

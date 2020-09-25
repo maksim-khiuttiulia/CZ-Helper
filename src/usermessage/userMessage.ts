@@ -1,7 +1,7 @@
 import Domain from "../abstract/domain";
 import {Column, Entity, PrimaryColumn} from "typeorm";
 
-@Entity("USER_MESSAGE")
+@Entity("user_message")
 class UserMessage extends Domain {
 
     @PrimaryColumn()

@@ -2,7 +2,7 @@ import Domain from "../abstract/domain";
 import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 import {WordCategory, WordType} from "./czechDictionaryEnums";
 
-@Entity('CZECH_DICTIONARY')
+@Entity('czech_dictionary')
 export default class CzechDictionaryWord extends Domain {
 
     @PrimaryGeneratedColumn()

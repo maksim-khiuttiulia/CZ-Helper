@@ -1,7 +1,7 @@
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import Domain from "../abstract/domain";
 
-@Entity('PUBLIC_NOTICE')
+@Entity('public_notice')
 export default class PublicNotice extends Domain {
 
     @PrimaryGeneratedColumn()
