@@ -7,7 +7,6 @@
     "dev": "tsc-watch --onSuccess \"node ./dist/server.js\"",
     "debug_win": "tsc-watch --onSuccess \"set DEBUG=* & node ./dist/server.js\"",
     "build": "tsc",
-    "prestart": "mkdir dist & tsc & pm2 delete czhelper & pm2 start ./dist/server.js -n czhelper",
     "start": "tsc & cp .env ./dist/.env & \"pm2 restart czhelper\""
   },
   "repository": {
