@@ -13,7 +13,7 @@ class ApplicationStatusService {
 
         for (let status of fromDbStatuses){
             let statusFromWeb : ApplicationStatusType =  await ApplicationStatusPageParser.getApplicationStatus(status.applicationNumber);
-            if (statusFromWeb == ApplicationStatusType.APPROVED || statusFromWeb == ApplicationStatusType.REJECTED){
+            if (this._isFinalStatus(statusFromWeb)){
                 status.finalValue = true;
             }
             await repository.save(status);
@@ -22,7 +22,46 @@ class ApplicationStatusService {
     }
 
     async getVisaStatus(visaNumber : string) : Promise<ApplicationStatusType> {
-        return await ApplicationStatusPageParser.getApplicationStatus(visaNumber);
+        let visaNumberUpperCase : string = visaNumber.toUpperCase().trim();
+        let repository : Repository<ApplicationStatus> = getConnection().getRepository(ApplicationStatus);
+        let applicationStatus : ApplicationStatus | undefined = await repository.findOne({applicationNumber : visaNumberUpperCase})
+        if (applicationStatus){
+            return await this._updateApplicationStatus(applicationStatus);
+        } else {
+            return await this.readNewApplicationStatus(visaNumberUpperCase);
+        }
+    }
+
+    private async readNewApplicationStatus(visaNumber: string) {
+        let repository : Repository<ApplicationStatus> = getConnection().getRepository(ApplicationStatus);
+        let parsedApplicationStatus: ApplicationStatusType = await ApplicationStatusPageParser.getApplicationStatus(visaNumber);
+        let applicationStatus: ApplicationStatus = new ApplicationStatus(visaNumber, parsedApplicationStatus);
+        applicationStatus.finalValue = this._isFinalStatus(parsedApplicationStatus);
+        await repository.save(applicationStatus);
+        return parsedApplicationStatus;
+    }
+
+    private async _updateApplicationStatus(applicationStatus: ApplicationStatus) {
+        let repository : Repository<ApplicationStatus> = getConnection().getRepository(ApplicationStatus);
+        if (applicationStatus.finalValue) {
+            return applicationStatus.status;
+        } else {
+            let parsedApplicationStatus: ApplicationStatusType = await ApplicationStatusPageParser.getApplicationStatus(applicationStatus.applicationNumber);
+            applicationStatus.status = parsedApplicationStatus;
+
+            if (this._isFinalStatus(parsedApplicationStatus)) {
+                applicationStatus.finalValue = true;
+            } else {
+                applicationStatus.status = parsedApplicationStatus;
+            }
+
+            await repository.save(applicationStatus);
+            return parsedApplicationStatus;
+        }
+    }
+
+    private _isFinalStatus(status : ApplicationStatusType) : boolean {
+        return status == ApplicationStatusType.APPROVED || status == ApplicationStatusType.REJECTED;
     }
 
     private async _notifyUser(status : ApplicationStatus) : Promise<void> {

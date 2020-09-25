@@ -28,7 +28,7 @@ class VkVisaService {
 
 
     processGetPublicNoticeMessage(inputMessage : Message) : void {
-        let message = inputMessage.text.trim()
+        let message = inputMessage.text.trim().toUpperCase()
         const regex: RegExpMatchArray | null = message.match(VK_IN_CHECK_PUBLIC_NOTICE_REGEX);
         if (regex === null) {
             VkMessageService.sendWrongFormatMessage(inputMessage.peer_id, inputMessage.group_id);
@@ -44,7 +44,7 @@ class VkVisaService {
     }
 
     processGetVisaStatus(inputMessage : Message) : void {
-        let message = inputMessage.text.trim()
+        let message = inputMessage.text.trim().toUpperCase()
         const regex: RegExpMatchArray | null = message.match(VK_IN_CHECK_VISA_REGEX);
         if (regex === null) {
             VkMessageService.sendWrongFormatMessage(inputMessage.peer_id, inputMessage.group_id);

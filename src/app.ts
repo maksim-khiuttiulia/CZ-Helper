@@ -4,6 +4,7 @@ import Controller from "./abstract/controller";
 import dotenv from "dotenv";
 import {createConnection} from "typeorm";
 import Logger from "./logger/logger";
+import Jobs from "./jobs/jobs"
 
 dotenv.config();
 let PORT: number = Number(process.env.SERVER_PORT);
@@ -69,6 +70,7 @@ export default class App {
     }
 
     private initializeJobs() : void {
-        //Jobs.initUpdatePublicNotices();
+        Jobs.initUpdatePublicNotices();
+        Jobs.initUpdateApplicationStatuses();
     }
 }

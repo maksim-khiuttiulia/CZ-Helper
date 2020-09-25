@@ -32,10 +32,8 @@ export default class ApplicationStatus extends Domain {
 
     equals(another: ApplicationStatus): boolean {
         let o : ApplicationStatus = another as ApplicationStatus
-        if (this.applicationNumber === o.applicationNumber){
-            return true;
-        }
-        return false;
+        return this.applicationNumber === o.applicationNumber;
+
     }
 
 

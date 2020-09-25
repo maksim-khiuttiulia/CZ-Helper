@@ -2,10 +2,12 @@ import {Message, Payload, VkBotPayload} from "./payloads/vkBotPayloads";
 import Logger from "../logger/logger"
 import VkMessageService from "./messages/vkMessageService"
 import VkBotKeyboardService from "./keyboard/vkBotKeyboardService";
-import {isMatch, isMatchInUpperCase} from "../utils/regexUtils";
+import {isMatchInUpperCase} from "../utils/regexUtils";
 import VkVisaService from "./vkVisaService"
 import {
-    VK_IN_CHECK_PUBLIC_NOTICE_REGEX, VK_IN_CHECK_VISA_REGEX, VK_IN_MESSAGE_PREFIX_REGEX,
+    VK_IN_CHECK_PUBLIC_NOTICE_REGEX_PREFIX,
+    VK_IN_CHECK_VISA_REGEX_PREFIX,
+    VK_IN_MESSAGE_PREFIX_REGEX,
     VK_IN_WAKE_UP_REGEX
 } from "./vkInputMessagePatterns";
 
@@ -31,20 +33,22 @@ class VkBotService {
     private _processMessageText(inputMessage : Message) : void {
         inputMessage.text = inputMessage.text.toUpperCase();
         let text = inputMessage.text.toUpperCase();
-        if (isMatch(text, VK_IN_WAKE_UP_REGEX)){
-            this._markAsRead(inputMessage)
-            VkMessageService.sendWakeupMessage(inputMessage.peer_id, inputMessage.group_id);
-            return
-        }
-        if (isMatch(text, VK_IN_CHECK_PUBLIC_NOTICE_REGEX)) {
-            this._markAsRead(inputMessage)
-            VkVisaService.processGetPublicNoticeMessage(inputMessage);
-            return;
-        }
-        if (isMatch(text, VK_IN_CHECK_VISA_REGEX)) {
-            this._markAsRead(inputMessage)
-            VkVisaService.processGetVisaStatus(inputMessage);
-            return;
+        if (isMatchInUpperCase(text, VK_IN_MESSAGE_PREFIX_REGEX)){
+            if (isMatchInUpperCase(text, VK_IN_WAKE_UP_REGEX)){
+                this._markAsRead(inputMessage)
+                VkMessageService.sendWakeupMessage(inputMessage.peer_id, inputMessage.group_id);
+                return
+            }
+            if (isMatchInUpperCase(text, VK_IN_CHECK_PUBLIC_NOTICE_REGEX_PREFIX)) {
+                this._markAsRead(inputMessage)
+                VkVisaService.processGetPublicNoticeMessage(inputMessage);
+                return;
+            }
+            if (isMatchInUpperCase(text, VK_IN_CHECK_VISA_REGEX_PREFIX)) {
+                this._markAsRead(inputMessage)
+                VkVisaService.processGetVisaStatus(inputMessage);
+                return;
+            }
         }
     }
 
