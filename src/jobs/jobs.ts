@@ -2,6 +2,7 @@ import {schedule} from "node-cron";
 import {UPDATE_APPLICATION_STATUSES, UPDATE_NOTICES_SCHEDULE} from "./jobsSchedules";
 import Logger from "../logger/logger"
 import PublicNoticeService from "../publicnotice/publicNoticeService"
+import ApplicationStatusService from "../applicationstatus/applicationStatusService"
 
 class Jobs {
     initUpdatePublicNotices() : void {
@@ -20,7 +21,7 @@ class Jobs {
         Logger.logInfo("Initializing initUpdateApplicationStatuses")
         schedule(UPDATE_APPLICATION_STATUSES, () => {
             Logger.logInfo("Application statuses will updated")
-            PublicNoticeService.updateAllNotices().then(value => {
+            ApplicationStatusService.updateAllApplicationStatuses().then(value => {
                 Logger.logInfo("Application statuses were updated");
             }).catch(reason => {
                 Logger.logError(reason);

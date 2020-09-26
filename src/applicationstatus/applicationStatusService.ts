@@ -16,6 +16,9 @@ class ApplicationStatusService {
             if (this._isFinalStatus(statusFromWeb)){
                 status.finalValue = true;
             }
+            if (statusFromWeb == ApplicationStatusType.UNKNOWN){
+                status.finalValue = true;
+            }
             await repository.save(status);
             await this._notifyUser(status);
         }
@@ -37,6 +40,11 @@ class ApplicationStatusService {
         let parsedApplicationStatus: ApplicationStatusType = await ApplicationStatusPageParser.getApplicationStatus(visaNumber);
         let applicationStatus: ApplicationStatus = new ApplicationStatus(visaNumber, parsedApplicationStatus);
         applicationStatus.finalValue = this._isFinalStatus(parsedApplicationStatus);
+
+        if (parsedApplicationStatus == ApplicationStatusType.UNKNOWN){
+            applicationStatus.finalValue = true;
+        }
+
         await repository.save(applicationStatus);
         return parsedApplicationStatus;
     }

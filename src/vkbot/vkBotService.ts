@@ -2,6 +2,7 @@ import {Message, Payload, VkBotPayload} from "./payloads/vkBotPayloads";
 import Logger from "../logger/logger"
 import VkMessageService from "./messages/vkMessageService"
 import VkBotKeyboardService from "./keyboard/vkBotKeyboardService";
+import VkUserService from "./users/vkUserService"
 import {isMatchInUpperCase} from "../utils/regexUtils";
 import VkVisaService from "./vkVisaService"
 import {
@@ -21,12 +22,25 @@ class VkBotService {
 
         if (inputMessage.payload){
             this._processMessagePayload(botPayload.object);
+            this._saveUser(botPayload);
             return
         }
 
         if (inputMessage.text && isMatchInUpperCase(inputMessage.text, VK_IN_MESSAGE_PREFIX_REGEX)){
             this._processMessageText(inputMessage)
+            this._saveUser(botPayload);
             return;
+        }
+    }
+
+    private _saveUser(botPayload : VkBotPayload) : void {
+        let userId = botPayload.object.from_id
+        if (userId){
+            VkUserService.saveUserById(userId).then(e => {
+                Logger.logInfo("Saved new user from VK" + userId)
+            }).catch(reason => {
+                Logger.logError(reason);
+            })
         }
     }
 

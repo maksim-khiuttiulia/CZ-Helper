@@ -52,7 +52,8 @@ export default class App {
                 __dirname + "/applicationstatus/applicationStatus.js",
                 __dirname + "/czechdictionary/czechDictionaryWord.js",
                 __dirname + "/publicnotice/publicNotice.js",
-                __dirname + "/usermessage/userMessage.js"
+                __dirname + "/usermessage/userMessage.js",
+                __dirname + "/user/user.js"
             ]
         }).then(() => {
             Logger.logInfo("Connected to DB")
