@@ -25,14 +25,20 @@ class ApplicationStatusService {
     }
 
     async getVisaStatus(visaNumber : string) : Promise<ApplicationStatusType> {
-        let visaNumberUpperCase : string = visaNumber.toUpperCase().trim();
-        let repository : Repository<ApplicationStatus> = getConnection().getRepository(ApplicationStatus);
-        let applicationStatus : ApplicationStatus | undefined = await repository.findOne({applicationNumber : visaNumberUpperCase})
-        if (applicationStatus){
-            return await this._updateApplicationStatus(applicationStatus);
-        } else {
-            return await this.readNewApplicationStatus(visaNumberUpperCase);
+        try {
+            let visaNumberUpperCase : string = visaNumber.toUpperCase().trim();
+            let repository : Repository<ApplicationStatus> = getConnection().getRepository(ApplicationStatus);
+            let applicationStatus : ApplicationStatus | undefined = await repository.findOne({applicationNumber : visaNumberUpperCase})
+            if (applicationStatus){
+                return await this._updateApplicationStatus(applicationStatus);
+            } else {
+                return await this.readNewApplicationStatus(visaNumberUpperCase);
+            }
+        } catch (e){
+            Logger.logError(e);
+            throw e;
         }
+
     }
 
     private async readNewApplicationStatus(visaNumber: string) {

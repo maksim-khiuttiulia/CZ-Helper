@@ -12,11 +12,6 @@ class UserService {
         let repository : Repository<User> = getConnection().getRepository(User);
         return await repository.findOne({contact : contact, contactMechanism : contactMechanism})
     }
-
-    async getUserByLatName(latFirstName : string, latLastName : string) : Promise<User | undefined> {
-        let repository : Repository<User> = getConnection().getRepository(User);
-        return await repository.findOne({latFirstName, latLastName})
-    }
 }
 
 export default new UserService();

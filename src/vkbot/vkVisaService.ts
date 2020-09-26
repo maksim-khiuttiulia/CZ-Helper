@@ -40,6 +40,8 @@ class VkVisaService {
         PublicNoticeService.getActivePublicNotices(firstName, lastName).then(notices => {
             let message : VkBotStaticMessage = this._getFormattedMessagePublicNotice(notices);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment);
+        }).catch(reason => {
+            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
     }
 
@@ -57,6 +59,8 @@ class VkVisaService {
         ApplicationStatusVisa.getVisaStatus(visaNumber).then(status => {
             let message = this._getFormattedMessageVisaStatus(status);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
+        }).catch(reason => {
+            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
 
     }
