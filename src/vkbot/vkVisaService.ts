@@ -2,6 +2,8 @@ import PublicNotice from "../publicnotice/publicNotice";
 import VkMessageService from "./messages/vkMessageService";
 import PublicNoticeService from "../publicnotice/publicNoticeService";
 import ApplicationStatusVisa from "../applicationstatus/applicationStatusService"
+import Logger from "../logger/logger"
+
 
 import {Message} from "./payloads/vkBotPayloads";
 import {
@@ -41,6 +43,7 @@ class VkVisaService {
             let message : VkBotStaticMessage = this._getFormattedMessagePublicNotice(notices);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment);
         }).catch(reason => {
+            Logger.logError(reason);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
     }
@@ -60,6 +63,7 @@ class VkVisaService {
             let message = this._getFormattedMessageVisaStatus(status);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
         }).catch(reason => {
+            Logger.logError(reason);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
 

@@ -1,6 +1,7 @@
 import Controller from "../abstract/controller";
 import {Request, Response} from "express";
 import PublicNoticeService from "../publicnotice/publicNoticeService"
+import ApplicationStatusService from "../applicationstatus/applicationStatusService";
 
 const PATH : string = "/jobs"
 class JobController extends Controller {
@@ -20,7 +21,8 @@ class JobController extends Controller {
         response.status(200).send();
     }
 
-    private _updateApplicationStatuses(request : Request, response : Response) : void {
+    private async _updateApplicationStatuses(request : Request, response : Response) : Promise<void> {
+        await ApplicationStatusService.updateAllApplicationStatuses();
         response.status(200).send();
     }
 }
