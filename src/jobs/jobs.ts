@@ -6,25 +6,25 @@ import ApplicationStatusService from "../applicationstatus/applicationStatusServ
 
 class Jobs {
     initUpdatePublicNotices() : void {
-        Logger.logInfo("Initializing initUpdatePublicNotices")
+        Logger.logJob("Initializing initUpdatePublicNotices")
         schedule(UPDATE_NOTICES_SCHEDULE, () => {
-            Logger.logInfo("Public Notices will updated")
+            Logger.logJob("Public Notices will updated")
             PublicNoticeService.updateAllNotices().then(value => {
-                Logger.logInfo("Public Notices were updated");
+                Logger.logJob("Public Notices were updated");
             }).catch(reason => {
-                Logger.logError(reason);
+                Logger.logJob(reason);
             })
         })
     }
 
     initUpdateApplicationStatuses() : void {
-        Logger.logInfo("Initializing initUpdateApplicationStatuses")
+        Logger.logJob("Initializing initUpdateApplicationStatuses")
         schedule(UPDATE_APPLICATION_STATUSES, () => {
-            Logger.logInfo("Application statuses will updated")
+            Logger.logJob("Application statuses will updated")
             ApplicationStatusService.updateAllApplicationStatuses().then(value => {
-                Logger.logInfo("Application statuses were updated");
+                Logger.logJob("Application statuses were updated");
             }).catch(reason => {
-                Logger.logError(reason);
+                Logger.logJob(reason);
             })
         })
     }

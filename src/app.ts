@@ -27,6 +27,7 @@ export default class App {
         this.initializeDBConnection();
         this.initializeControllers(controllers);
         this.initializeJobs();
+        this._app.use(Logger.logError)
     }
 
     public listen() : void {
@@ -58,8 +59,7 @@ export default class App {
         }).then(() => {
             Logger.logInfo("Connected to DB")
         }).catch(e => {
-            Logger.logError("Failed to connect to DB")
-            Logger.logError(e)
+            Logger.logError("Failed to connect to DB", e)
         })
     }
 

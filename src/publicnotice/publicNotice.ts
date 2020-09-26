@@ -34,10 +34,10 @@ export default class PublicNotice extends Domain {
     @Column({name : "url"})
     url? : string;
 
-    @Column()
+    @Column({name : "valid", type : "boolean"})
     valid : boolean = true;
 
-    @Column()
+    @Column({name : "expired", type : "boolean"})
     expired : boolean = false
 
 

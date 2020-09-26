@@ -20,7 +20,7 @@ export default class ApplicationStatus extends Domain {
     @Column({name : "status", type : "enum", enum : ApplicationStatusType})
     status : ApplicationStatusType;
 
-    @Column({name : "final_value"})
+    @Column({name : "final_value", type : Boolean})
     finalValue : boolean = false
 
 

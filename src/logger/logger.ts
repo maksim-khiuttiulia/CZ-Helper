@@ -8,6 +8,8 @@ class Logger {
     private readonly _errorLogger : WinstonLogger
     private readonly _requestLogger : WinstonLogger
 
+    private readonly _jobsLogger : WinstonLogger
+
     constructor() {
         if (!fs.existsSync(LOGS_PATH)){
             fs.mkdirSync(LOGS_PATH);
@@ -50,6 +52,19 @@ class Logger {
                 new transports.File({filename : LOGS_PATH +'/requests.log'})
             ]
         });
+
+        this._jobsLogger = createLogger({
+            handleExceptions : true,
+            level : 'info',
+            format : format.combine(
+                format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+                format.json()
+            ),
+            transports: [
+                new transports.Console(),
+                new transports.File({filename : LOGS_PATH +'/jobs.log'})
+            ]
+        });
     }
 
     logInfo(info : any) : void {
@@ -62,6 +77,10 @@ class Logger {
 
     logRequest(request : any) : void {
         this._requestLogger.info(request);
+    }
+
+    logJob(info : any) : void {
+        this._jobsLogger.info(info);
     }
 
 }

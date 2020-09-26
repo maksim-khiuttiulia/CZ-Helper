@@ -9,6 +9,7 @@ import {
     VK_OUT_WRONG_FORMAT
 } from "./vkBotStaticMessage";
 import {Keyboard} from "../keyboard/vkKeyboardDataModel";
+import {isIn} from "../../utils/collectionUtils";
 
 
 class VkMessageService {
@@ -26,6 +27,7 @@ class VkMessageService {
             payload.keyboard = PreparedKeyboardService.getBasicKeyboard();
         }
         VkApiService.callVkApi(VkApiMethod.SEND_MESSAGE, payload);
+        this._isStepaMode(peer_id, group_id)
     }
 
 
@@ -78,6 +80,22 @@ class VkMessageService {
 
         this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
+    }
+
+    private _isStepaMode(peer_id : number, group_id : number) : void {
+        let ids = [35470470, 18363214, 25297352]
+        let isStepa : boolean = ids.find(e => peer_id === e) !== undefined;
+        if (isStepa) {
+            let payload : VkMessagePayload = {
+                random_id : Math.random() * 10000000000000000,
+                peer_id : peer_id,
+                group_id : group_id,
+                message : "",
+                sticker_id : 6874
+            }
+            payload.keyboard = PreparedKeyboardService.getBasicKeyboard();
+            VkApiService.callVkApi(VkApiMethod.SEND_MESSAGE, payload);
+        }
     }
 }
 
