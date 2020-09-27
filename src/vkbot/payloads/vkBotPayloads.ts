@@ -1,5 +1,5 @@
-import {ButtonPayload} from "../vkbotEnums";
 import {Keyboard} from "../keyboard/vkKeyboardDataModel";
+import {ButtonPayload} from "../keyboard/button/buttonPayloadType";
 
 export interface VkBotPayload {
     type : 'message_new' | 'message' | 'confirmation',

@@ -1,7 +1,7 @@
 import {Keyboard} from "./vkKeyboardDataModel";
 import VkKeyboardBuilder from "./vkKeyboardBuilder";
-import {ButtonColor} from "./vkKeyboardEnums";
-import {ButtonPayload} from "../vkbotEnums";
+import {ButtonPayload} from "./button/buttonPayloadType";
+import {ButtonColor} from "./button/buttonColor";
 
 
 class PreparedKeyboardService {
@@ -28,9 +28,10 @@ class PreparedKeyboardService {
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Экстренные телефоны", ButtonPayload.INFO_EMERGENCY_PHONES)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Скидки и цены", ButtonPayload.INFO_SALES_IN_SHOPS)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Аренда жилья и авто", ButtonPayload.INFO_RENT)
-        builder.addButtonTextOnLine(ButtonColor.GREEN, "Билеты на автобусы и поезда", ButtonPayload.INFO_TICKETS)
+        builder.addButtonTextOnLine(ButtonColor.GREEN, "Билеты", ButtonPayload.INFO_TICKETS)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Службы такси", ButtonPayload.INFO_TAXIS)
         builder.addButtonTextOnLine(ButtonColor.GREEN, "Поиск работы", ButtonPayload.INFO_JOBS)
+        builder.addButtonTextOnLine(ButtonColor.GREEN, "Полезные приложения", ButtonPayload.INFO_APPLICATIONS)
         return builder.build(false, true);
     }
 

@@ -1,6 +1,6 @@
-import {ButtonPayload} from "../vkbotEnums";
-import {ButtonColor} from "./vkKeyboardEnums";
 import {Keyboard, KeyboardButton} from "./vkKeyboardDataModel";
+import {ButtonPayload} from "./button/buttonPayloadType";
+import {ButtonColor} from "./button/buttonColor";
 
 
 class VkKeyboardBuilder {

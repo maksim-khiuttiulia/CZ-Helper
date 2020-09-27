@@ -1,7 +1,7 @@
 import {getConnection, Repository} from "typeorm";
 import PublicNoticePageParser from "./publicNoticePageParser"
 import PublicNotice from "./publicNotice";
-import {isNotIn} from "../utils/collectionUtils";
+import {isNotInDomainsCollection} from "../utils/collectionUtils";
 import {FIRST_AND_LAST_NAME_REGEX, FIRST_NAME_REGEX_GROUP, LAST_NAME_REGEX_GROUP} from "./publicNoticeConstants";
 import Logger from "../logger/logger"
 
@@ -19,13 +19,13 @@ class PublicNoticeService {
         let newNotices : PublicNotice[] = [];
 
         for (let dbNotice of fromDbNotices){
-            if (isNotIn(dbNotice, downloadedNotices)){
+            if (isNotInDomainsCollection(dbNotice, downloadedNotices)){
                 dbNotice.expired = true;
                 expiredNotices.push(dbNotice);
             }
         }
         for (let dwNotice of downloadedNotices){
-            if (isNotIn(dwNotice, fromDbNotices)){
+            if (isNotInDomainsCollection(dwNotice, fromDbNotices)){
                 newNotices.push(dwNotice);
             }
         }

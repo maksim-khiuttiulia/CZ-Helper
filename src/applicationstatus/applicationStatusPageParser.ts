@@ -17,7 +17,7 @@ import {
     STATUS_REJECTED
 } from "./applicationStatusConstants";
 import {ApplicationStatusType} from "./applicationStatusType";
-import Logger from "../logger/logger"
+import {isMatch} from "../utils/regexUtils";
 
 interface OAMStatusNumber {
     number: string,
@@ -77,27 +77,27 @@ class ApplicationStatusPageParser {
     }
 
     private findStatusOnPage(content: string): ApplicationStatusType {
-        if (content.match(STATUS_APPROVED)) {
+        if (isMatch(content, STATUS_APPROVED)) {
             return ApplicationStatusType.APPROVED;
         }
-        if (content.match(STATUS_IN_PROGRESS)) {
+        if (isMatch(content, STATUS_IN_PROGRESS)) {
             return ApplicationStatusType.IN_PROGRESS;
         }
-        if (content.match(STATUS_NOT_FOUND)) {
+        if (isMatch(content, STATUS_NOT_FOUND)) {
             return ApplicationStatusType.NOT_FOUND;
         }
-        if (content.match(STATUS_REJECTED)) {
+        if (isMatch(content, STATUS_REJECTED)) {
             return ApplicationStatusType.REJECTED;
         }
         return ApplicationStatusType.UNKNOWN;
     }
 
     private isOAMNumber(number: string): boolean {
-        return number.match(REGEX_STATUS_NUMBER_OAM) != null;
+        return isMatch(number, REGEX_STATUS_NUMBER_OAM);
     }
 
     private isZovNumber(number: string): boolean {
-        return number.match(REGEX_STATUS_NUMBER_ZOV) != null;
+        return isMatch(number,REGEX_STATUS_NUMBER_ZOV);
     }
 
     private parseOAMNumber(number: string): OAMStatusNumber {

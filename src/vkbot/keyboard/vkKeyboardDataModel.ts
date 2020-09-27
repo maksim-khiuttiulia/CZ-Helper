@@ -1,5 +1,5 @@
-import {ButtonColor} from "./vkKeyboardEnums";
 import {Payload} from "../payloads/vkBotPayloads";
+import {ButtonColor} from "./button/buttonColor";
 
 export interface KeyboardButton {
     action: KeyboardButtonAction,
