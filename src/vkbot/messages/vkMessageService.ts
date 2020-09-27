@@ -22,7 +22,7 @@ class VkMessageService {
             group_id : group_id,
             message : encodeURI(message),
             keyboard : keyboard,
-            attachment : attachment
+            attachment : attachment,
         }
         if (!payload.keyboard){
             payload.keyboard = PreparedKeyboardService.getBasicKeyboard();

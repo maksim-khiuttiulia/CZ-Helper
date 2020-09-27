@@ -16,9 +16,8 @@ import {
 class VkBotService {
 
     processInputMessage(botPayload : VkBotPayload) : void {
-
         let inputMessage : Message = botPayload.object;
-        Logger.logInfo(inputMessage);
+        Logger.logRequest(inputMessage);
 
         if (inputMessage.payload){
             this._processMessagePayload(botPayload.object);
@@ -36,9 +35,7 @@ class VkBotService {
     private _saveUser(botPayload : VkBotPayload) : void {
         let userId = botPayload.object.from_id
         if (userId){
-            VkUserService.saveUserById(userId).then(e => {
-                Logger.logInfo("Saved new user from VK" + userId)
-            }).catch(reason => {
+            VkUserService.saveNewUserByIdIfNotExists(userId).catch(reason => {
                 Logger.logError(reason);
             })
         }
@@ -67,7 +64,6 @@ class VkBotService {
     }
 
     private _processMessagePayload(inputMessage : Message) : void {
-        Logger.logInfo(inputMessage);
         this._markAsRead(inputMessage)
 
         let payload : Payload = JSON.parse(inputMessage.payload);

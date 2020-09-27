@@ -12,7 +12,8 @@ export interface VkMessagePayload extends VkApiPayload {
     message : string
     attachment? : string,
     sticker_id? : number,
-    keyboard? : Keyboard
+    keyboard? : Keyboard,
+    dont_parse_links? : number
 }
 
 export interface VkMarkAsReadPayload extends VkApiPayload {

@@ -16,6 +16,7 @@ import {
     VK_FLAT_AND_AUTO_RENTS, VK_JOBS,
     VK_SALES_IN_SHOPS, VK_TAXIS_SERVICES
 } from "../../usermessage/userMessageIds";
+import Logger from "../../logger/logger"
 
 class VkBotKeyboardService {
 
@@ -98,41 +99,38 @@ class VkBotKeyboardService {
     }
 
     private _processHelpContactPayload(payload : ButtonPayload, peerId : number, groupId : number) : void {
-        let contactText : string | undefined;
+        let messageId : number = -1;
         if (payload === ButtonPayload.INFO_EMERGENCY_PHONES){
-            UserMessageService.getMessage(VK_EMERGENCY_PHONES)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_EMERGENCY_PHONES;
 
         } else if (payload === ButtonPayload.INFO_APPLICATIONS){
-            UserMessageService.getMessage(VK_APPLICATIONS)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_APPLICATIONS
 
         } else if (payload === ButtonPayload.INFO_SALES_IN_SHOPS){
-            UserMessageService.getMessage(VK_SALES_IN_SHOPS)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_SALES_IN_SHOPS
 
         } else if (payload === ButtonPayload.INFO_RENT){
-            UserMessageService.getMessage(VK_FLAT_AND_AUTO_RENTS)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_FLAT_AND_AUTO_RENTS
 
         } else if (payload === ButtonPayload.INFO_TICKETS){
-            UserMessageService.getMessage(VK_BUS_TRAIN_TICKETS)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_BUS_TRAIN_TICKETS
 
         } else if (payload === ButtonPayload.INFO_TAXIS){
-            UserMessageService.getMessage(VK_TAXIS_SERVICES)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_TAXIS_SERVICES
 
         } else if (payload === ButtonPayload.INFO_JOBS){
-            UserMessageService.getMessage(VK_JOBS)
-                .then(message =>{ contactText = message?.message; })
+            messageId = VK_JOBS
         }
 
-        if (contactText === undefined){
+
+        UserMessageService.getMessage(messageId).then(message => {
+            VkMessageService.sendGroupMessage(peerId, groupId, message.message)
+        }).catch(reason => {
+            Logger.logError(reason);
             VkMessageService.sendErrorMessage(peerId, groupId);
-        } else {
-            VkMessageService.sendGroupMessage(peerId, groupId, contactText)
-        }
+        })
+
+
     }
 
     private _getFormattedWord(word : CzechDictionaryWord) : string {

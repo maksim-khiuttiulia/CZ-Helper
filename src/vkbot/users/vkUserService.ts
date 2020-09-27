@@ -5,6 +5,7 @@ import {VkApiMethod} from "../vkbotEnums";
 import UserService from "../../user/userService";
 import User from "../../user/user";
 import {UserContactMechanism} from "../../user/userContactMechanism";
+import Logger from "../../logger/logger"
 
 
 class VkUserService {
@@ -18,15 +19,14 @@ class VkUserService {
         return data.response[0];
     }
 
-    async saveUserById(id : number) : Promise<VkUser> {
+    async saveNewUserByIdIfNotExists(id : number) : Promise<void> {
         let vkUser : VkUser | undefined = await this.getUser(id);
         if (vkUser){
-            await this.saveUserToDbIfNotExists(vkUser, undefined, undefined);
+            await this._saveUserToDbIfNotExists(vkUser, undefined, undefined);
         }
-        throw Error("Vk user with id " + id + "not exists");
     }
 
-    async saveUserToDbIfNotExists(vkUser : VkUser, latFirstName? : string, latLastName? : string) : Promise<User> {
+    private async _saveUserToDbIfNotExists(vkUser : VkUser, latFirstName? : string, latLastName? : string) : Promise<User> {
         let vkUserId : string = String(vkUser.id);
         let user : User | undefined = await UserService.getUserByContact(vkUserId, UserContactMechanism.VK);
         if (!user){
@@ -34,18 +34,10 @@ class VkUserService {
             newUser.latLastName = latLastName;
             newUser.latFirstName = latFirstName
             await UserService.saveUser(newUser);
+            Logger.logInfo("Save new user from VK to DB");
             return newUser;
         }
         return user;
-    }
-
-    async getUserFromDb(id : number) : Promise<VkUser | undefined> {
-        let vkUserId : string = String(id);
-        let user : User | undefined = await UserService.getUserByContact(vkUserId, UserContactMechanism.VK);
-        if (user){
-            return {id: id, first_name: user.firstName, last_name: user.lastName};
-        }
-        return undefined;
     }
 }
 

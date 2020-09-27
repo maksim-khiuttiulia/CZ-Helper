@@ -4,10 +4,7 @@ import * as fs from "fs";
 const LOGS_PATH : string = "logs"
 
 class Logger {
-    private readonly _infoLogger : WinstonLogger
-    private readonly _errorLogger : WinstonLogger
-    private readonly _requestLogger : WinstonLogger
-
+    private readonly _mainLogger : WinstonLogger
     private readonly _jobsLogger : WinstonLogger
 
     constructor() {
@@ -15,7 +12,7 @@ class Logger {
             fs.mkdirSync(LOGS_PATH);
         }
 
-        this._infoLogger = createLogger({
+        this._mainLogger = createLogger({
             level : 'info',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
@@ -24,32 +21,6 @@ class Logger {
             transports: [
                 new transports.Console(),
                 new transports.File({filename : LOGS_PATH +'/info.log'})
-            ]
-        });
-
-        this._errorLogger = createLogger({
-            handleExceptions : true,
-            level : 'error',
-            format : format.combine(
-                format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.json()
-            ),
-            transports: [
-                new transports.Console(),
-                new transports.File({filename : LOGS_PATH +'/errors.log'})
-            ]
-        });
-
-        this._requestLogger = createLogger({
-            handleExceptions : true,
-            level : 'info',
-            format : format.combine(
-                format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.json()
-            ),
-            transports: [
-                new transports.Console(),
-                new transports.File({filename : LOGS_PATH +'/requests.log'})
             ]
         });
 
@@ -68,15 +39,15 @@ class Logger {
     }
 
     logInfo(info : any) : void {
-        this._infoLogger.info(info);
+        this._mainLogger.info(info);
     }
 
     logError(error : any, ...meta: any[]) : void {
-        this._errorLogger.error(error, meta)
+        this._mainLogger.error(error, meta)
     }
 
     logRequest(request : any) : void {
-        this._requestLogger.info(request);
+        this._mainLogger.info(request);
     }
 
     logJob(info : any) : void {
