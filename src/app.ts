@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {NextFunction} from 'express';
 import * as bodyParser from 'body-parser';
 import Controller from "./abstract/controller";
 import dotenv from "dotenv";
@@ -27,7 +27,7 @@ export default class App {
         this.initializeDBConnection();
         this.initializeControllers(controllers);
         this.initializeJobs();
-        this._app.use(Logger.logError)
+        this.initializeLogger();
     }
 
     public listen() : void {
@@ -73,5 +73,11 @@ export default class App {
     private initializeJobs() : void {
         Jobs.initUpdatePublicNotices();
         Jobs.initUpdateApplicationStatuses();
+    }
+
+    private initializeLogger() : void {
+        process.on("uncaughtException", error => {
+            Logger.logError(error)
+        })
     }
 }

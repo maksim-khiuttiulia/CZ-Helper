@@ -4,8 +4,8 @@ import * as fs from "fs";
 const LOGS_PATH : string = "logs"
 
 class Logger {
-    private readonly _mainLogger : WinstonLogger
-    private readonly _jobsLogger : WinstonLogger
+    private  _mainLogger : WinstonLogger
+    private  _jobsLogger : WinstonLogger
 
     constructor() {
         if (!fs.existsSync(LOGS_PATH)){
