@@ -1,4 +1,4 @@
-import puppeteer, {Browser} from "puppeteer";
+import puppeteer, {Browser, Page} from "puppeteer";
 import {
     FORM_CODE_SELECTOR_OAM,
     FORM_NUMBER_COUNT_SELECTOR_OAM,
@@ -19,6 +19,7 @@ import {
 import {ApplicationStatusType} from "./applicationStatusType";
 import {isMatch} from "../utils/regexUtils";
 import * as fs from "fs";
+import Logger from "../logger/logger"
 
 interface OAMStatusNumber {
     number: string,
@@ -43,7 +44,6 @@ class ApplicationStatusPageParser {
     private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<ApplicationStatusType> {
         const browser: Browser = await puppeteer.launch({headless: true});
         const page = await browser.newPage();
-        try {
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_OAM, oamNumber.number)
 
@@ -53,46 +53,29 @@ class ApplicationStatusPageParser {
 
             await page.select(FORM_CODE_SELECTOR_OAM, oamNumber.code)
             await page.select(FORM_YEAR_SELECTOR_OAM, oamNumber.year)
+            await this._createScreenShot(page, oamNumber.number)
             await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
             await page.waitForNavigation();
+            await this._createScreenShot(page, oamNumber.number)
             let content: string = await page.content();
             await browser.close();
 
             return this.findStatusOnPage(content);
-        } catch (e) {
-            if (page) {
-                let path = "./screens"
-                fs.mkdirSync(path)
-                let filename = oamNumber.number + "_" + Date.now() + ".png"
-                await page.screenshot({fullPage: true, path: path + "/" + filename})
-            }
-            throw e;
-        }
     }
 
     private async getApplicationStatusZov(zovNumber: string): Promise<ApplicationStatusType> {
         const browser: Browser = await puppeteer.launch({headless: true});
         const page = await browser.newPage();
-        try {
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_ZOV, zovNumber)
+            await this._createScreenShot(page, zovNumber)
             await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
             await page.waitForNavigation();
+            await this._createScreenShot(page, zovNumber)
 
             let content: string = await page.content();
             await browser.close();
             return this.findStatusOnPage(content);
-
-        } catch (e) {
-            if (page) {
-                let path = "./screens"
-                fs.mkdirSync(path)
-                let filename = zovNumber + "_" + Date.now() + ".png"
-                await page.screenshot({fullPage: true, path: path + "/" + filename})
-            }
-            await browser.close();
-            throw e;
-        }
     }
 
     private findStatusOnPage(content: string): ApplicationStatusType {
@@ -129,6 +112,19 @@ class ApplicationStatusPageParser {
         let codeRes: string = regex[REGEX_GROUP_STATUS_CODE_OAM];
         let yearRes: string = regex[REGEX_GROUP_STATUS_YEAR_OAM];
         return {number: numberRes, countNumber: countNumberRes, code: codeRes, year: yearRes}
+    }
+
+    private async _createScreenShot(page : Page, filename : string) : Promise<void> {
+        Logger.logInfo("Create screenshot " + filename)
+        if (page){
+            let path = "./logs/screens"
+            if (!fs.existsSync(path)){
+                fs.mkdirSync(path)
+            }
+            let file = filename + "_" + Date.now() + ".png"
+            await page.screenshot({path : path + "/" + file})
+            Logger.logInfo("Was created screenshot " + file)
+        }
     }
 
 }
