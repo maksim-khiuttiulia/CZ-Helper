@@ -18,6 +18,7 @@ import {
 } from "./applicationStatusConstants";
 import {ApplicationStatusType} from "./applicationStatusType";
 import {isMatch} from "../utils/regexUtils";
+import * as fs from "fs";
 
 interface OAMStatusNumber {
     number: string,
@@ -33,15 +34,16 @@ class ApplicationStatusPageParser {
             let oamNumber: OAMStatusNumber = this.parseOAMNumber(number);
             return await this.getApplicationStatusOAM(oamNumber);
         }
-        if (this.isZovNumber(number)){
+        if (this.isZovNumber(number)) {
             return await this.getApplicationStatusZov(number);
         }
         throw new Error("Unsuported");
     }
 
     private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<ApplicationStatusType> {
-            const browser: Browser = await puppeteer.launch({headless: true});
-            const page = await browser.newPage();
+        const browser: Browser = await puppeteer.launch({headless: true});
+        const page = await browser.newPage();
+        try {
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_OAM, oamNumber.number)
 
@@ -51,29 +53,46 @@ class ApplicationStatusPageParser {
 
             await page.select(FORM_CODE_SELECTOR_OAM, oamNumber.code)
             await page.select(FORM_YEAR_SELECTOR_OAM, oamNumber.year)
-            await page.click(FORM_SUBMIT_BUTTON, {delay: 4000});
+            await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
             await page.waitForNavigation();
-
             let content: string = await page.content();
-
             await browser.close();
 
             return this.findStatusOnPage(content);
+        } catch (e) {
+            if (page) {
+                let path = "./screens"
+                fs.mkdirSync(path)
+                let filename = oamNumber.number + "_" + Date.now() + ".png"
+                await page.screenshot({fullPage: true, path: path + "/" + filename})
+            }
+            throw e;
+        }
     }
 
-    private async getApplicationStatusZov(zovNumber : string): Promise<ApplicationStatusType> {
+    private async getApplicationStatusZov(zovNumber: string): Promise<ApplicationStatusType> {
         const browser: Browser = await puppeteer.launch({headless: true});
         const page = await browser.newPage();
-        await page.goto(FORM_URL)
-        await page.type(FORM_NUMBER_SELECTOR_ZOV, zovNumber)
-        await page.click(FORM_SUBMIT_BUTTON, {delay: 4000});
-        await page.waitForNavigation();
+        try {
+            await page.goto(FORM_URL)
+            await page.type(FORM_NUMBER_SELECTOR_ZOV, zovNumber)
+            await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
+            await page.waitForNavigation();
 
-        let content: string = await page.content();
+            let content: string = await page.content();
+            await browser.close();
+            return this.findStatusOnPage(content);
 
-        await browser.close();
-
-        return this.findStatusOnPage(content);
+        } catch (e) {
+            if (page) {
+                let path = "./screens"
+                fs.mkdirSync(path)
+                let filename = zovNumber + "_" + Date.now() + ".png"
+                await page.screenshot({fullPage: true, path: path + "/" + filename})
+            }
+            await browser.close();
+            throw e;
+        }
     }
 
     private findStatusOnPage(content: string): ApplicationStatusType {
@@ -97,7 +116,7 @@ class ApplicationStatusPageParser {
     }
 
     private isZovNumber(number: string): boolean {
-        return isMatch(number,REGEX_STATUS_NUMBER_ZOV);
+        return isMatch(number, REGEX_STATUS_NUMBER_ZOV);
     }
 
     private parseOAMNumber(number: string): OAMStatusNumber {
