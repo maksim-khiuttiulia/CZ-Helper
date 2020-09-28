@@ -90,7 +90,7 @@ class ApplicationStatusPageParser {
             const page = await browser.newPage();
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_ZOV, zovNumber)
-            await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
+            await page.click(FORM_SUBMIT_BUTTON, {delay: 3500});
             await page.waitForNavigation();
 
             let content: string = await page.content();
