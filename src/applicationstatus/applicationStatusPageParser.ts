@@ -49,13 +49,7 @@ class ApplicationStatusPageParser {
 
     private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<ApplicationStatusType> {
         const browser = await puppeteer.launch({headless : true, args: [
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
                 '--single-process', // <- this one doesn't works in Windows
-                '--disable-gpu'
             ]})
 
         try {
@@ -88,13 +82,7 @@ class ApplicationStatusPageParser {
 
     private async getApplicationStatusZov(zovNumber: string): Promise<ApplicationStatusType> {
         const browser = await puppeteer.launch({headless : true, args: [
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
                 '--single-process', // <- this one doesn't works in Windows
-                '--disable-gpu'
             ]})
 
         try {
