@@ -20,6 +20,7 @@ import {ApplicationStatusType} from "./applicationStatusType";
 import {isMatch} from "../utils/regexUtils";
 import * as fs from "fs";
 import Logger from "../logger/logger"
+import PQueue from "p-queue";
 
 interface OAMStatusNumber {
     number: string,
@@ -30,20 +31,32 @@ interface OAMStatusNumber {
 
 class ApplicationStatusPageParser {
 
+    private readonly PATH_TO_SCREENSHOTS : string = "./logs/screens";
+
+    private readonly queue : PQueue;
+
+
+    constructor() {
+        this.queue = new PQueue({concurrency : 1});
+    }
+
     async getApplicationStatus(number: string): Promise<ApplicationStatusType> {
+        console.warn(this.queue.size)
         if (this.isOAMNumber(number)) {
             let oamNumber: OAMStatusNumber = this.parseOAMNumber(number);
-            return await this.getApplicationStatusOAM(oamNumber);
+            return await this.queue.add(() => this.getApplicationStatusOAM(oamNumber));
         }
         if (this.isZovNumber(number)) {
-            return await this.getApplicationStatusZov(number);
+            return await this.queue.add(() => this.getApplicationStatusZov(number));
         }
         throw new Error("Unsuported");
     }
 
     private async getApplicationStatusOAM(oamNumber: OAMStatusNumber): Promise<ApplicationStatusType> {
-        const browser: Browser = await puppeteer.launch({headless: true});
-        const page = await browser.newPage();
+        const browser = await puppeteer.launch({headless : true})
+
+        try {
+            const page = await browser.newPage();
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_OAM, oamNumber.number)
 
@@ -53,19 +66,32 @@ class ApplicationStatusPageParser {
 
             await page.select(FORM_CODE_SELECTOR_OAM, oamNumber.code)
             await page.select(FORM_YEAR_SELECTOR_OAM, oamNumber.year)
-            await this._createScreenShot(page, oamNumber.number)
-            await page.click(FORM_SUBMIT_BUTTON, {delay: 5000});
+
+            await this._createScreenShot(page, oamNumber.number + oamNumber.code)
+
+            await page.click(FORM_SUBMIT_BUTTON, {delay: 3500});
             await page.waitForNavigation();
-            await this._createScreenShot(page, oamNumber.number)
+            await this._createScreenShot(page, oamNumber.number + oamNumber.code)
+
             let content: string = await page.content();
-            await browser.close();
+
+            await page.close();
+            await this._deleteScreenShots(oamNumber.number + oamNumber.code);
 
             return this.findStatusOnPage(content);
+        } catch (e) {
+            if (browser) {
+                await browser.close()
+            }
+            throw e;
+        }
     }
 
     private async getApplicationStatusZov(zovNumber: string): Promise<ApplicationStatusType> {
-        const browser: Browser = await puppeteer.launch({headless: true});
-        const page = await browser.newPage();
+        const browser = await puppeteer.launch({headless : true})
+
+        try {
+            const page = await browser.newPage();
             await page.goto(FORM_URL)
             await page.type(FORM_NUMBER_SELECTOR_ZOV, zovNumber)
             await this._createScreenShot(page, zovNumber)
@@ -74,8 +100,17 @@ class ApplicationStatusPageParser {
             await this._createScreenShot(page, zovNumber)
 
             let content: string = await page.content();
-            await browser.close();
+            await page.close();
+
+            await this._deleteScreenShots(zovNumber);
+
             return this.findStatusOnPage(content);
+        } catch (e) {
+            if (browser) {
+                await browser.close()
+            }
+            throw e;
+        }
     }
 
     private findStatusOnPage(content: string): ApplicationStatusType {
@@ -114,19 +149,25 @@ class ApplicationStatusPageParser {
         return {number: numberRes, countNumber: countNumberRes, code: codeRes, year: yearRes}
     }
 
-    private async _createScreenShot(page : Page, filename : string) : Promise<void> {
-        Logger.logInfo("Create screenshot " + filename)
-        if (page){
-            let path = "./logs/screens"
-            if (!fs.existsSync(path)){
-                fs.mkdirSync(path)
-            }
-            let file = filename + "_" + Date.now() + ".png"
-            await page.screenshot({path : path + "/" + file})
+    private async _createScreenShot(page: Page, folder: string): Promise<void> {
+        let path = this.PATH_TO_SCREENSHOTS + "/" + folder;
+
+        if (!fs.existsSync(path)) {
+            fs.mkdirSync(path)
+        }
+
+        Logger.logInfo("Create screenshot to folder: " + folder)
+        if (page) {
+            let file = Date.now() + ".png"
+            await page.screenshot({path: path + "/" + file})
             Logger.logInfo("Was created screenshot " + file)
         }
     }
 
+    private async _deleteScreenShots(folder : string) : Promise<void> {
+        let path = this.PATH_TO_SCREENSHOTS + "/" + folder;
+        fs.rmdirSync(path, {recursive : true})
+    }
 }
 
 export default new ApplicationStatusPageParser();

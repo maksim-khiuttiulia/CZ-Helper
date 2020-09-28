@@ -1,7 +1,7 @@
 import {createLogger, format, Logger as WinstonLogger, transports} from "winston";
 import * as fs from "fs";
 
-const LOGS_PATH : string = "logs"
+const LOGS_PATH : string = "./logs"
 
 class Logger {
     private  _mainLogger : WinstonLogger
