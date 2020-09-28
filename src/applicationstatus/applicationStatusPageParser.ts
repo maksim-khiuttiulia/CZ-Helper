@@ -70,6 +70,7 @@ class ApplicationStatusPageParser {
             let content: string = await page.content();
 
             await page.close();
+            await browser.close()
 
             return this.findStatusOnPage(content);
         } catch (e) {
@@ -94,6 +95,7 @@ class ApplicationStatusPageParser {
 
             let content: string = await page.content();
             await page.close();
+            await browser.close()
 
             return this.findStatusOnPage(content);
         } catch (e) {
