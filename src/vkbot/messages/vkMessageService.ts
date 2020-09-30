@@ -10,7 +10,6 @@ import {
     VK_OUT_WRONG_FORMAT
 } from "./vkBotStaticMessage";
 import {Keyboard} from "../keyboard/vkKeyboardDataModel";
-import {isInDomainsCollection} from "../../utils/collectionUtils";
 
 
 class VkMessageService {
@@ -70,13 +69,16 @@ class VkMessageService {
     sendWaitMessage(peerId : number, groupId : number) : void {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_WAIT.message
-        this.sendGroupMessage(peerId, groupId, message)
+        let attachment : string | undefined = VK_OUT_WAIT.attachment;
+        this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 
     sendErrorMessage(peerId : number, groupId : number) : void {
         this.markAsRead(peerId, groupId);
-        this.sendGroupMessage(peerId, groupId, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
+        let message : string = VK_OUT_ERROR.message
+        let attachment : string | undefined = VK_OUT_ERROR.attachment;
+        this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -90,7 +92,7 @@ class VkMessageService {
     }
 
     private _isStepaMode(peer_id : number, group_id : number) : void {
-        let ids = [35470470, 18363214, 25297352]
+        let ids = [35470470]
         let isStepa : boolean = ids.find(e => peer_id === e) !== undefined;
         if (isStepa) {
             let payload : VkMessagePayload = {
