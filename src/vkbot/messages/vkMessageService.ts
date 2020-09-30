@@ -5,8 +5,8 @@ import PreparedKeyboardService from "../keyboard/preparedKeyboardService"
 import {
     VK_OUT_ERROR,
     VK_OUT_UNKNOWN_COMMAND, VK_OUT_WAIT,
-    VK_OUT_WAKE_UP_MESSAGE_RU,
-    VK_OUT_WELCOME_MESSAGE_RU,
+    VK_OUT_WAKE_UP_MESSAGE,
+    VK_OUT_WELCOME_MESSAGE,
     VK_OUT_WRONG_FORMAT
 } from "./vkBotStaticMessage";
 import {Keyboard} from "../keyboard/vkKeyboardDataModel";
@@ -42,16 +42,16 @@ class VkMessageService {
     }
 
     sendWelcomeMessage(peerId : number, groupId : number) : void {
-        let message : string = VK_OUT_WELCOME_MESSAGE_RU.message
-        let attachment : string | undefined = VK_OUT_WELCOME_MESSAGE_RU.attachment
+        let message : string = VK_OUT_WELCOME_MESSAGE.message
+        let attachment : string | undefined = VK_OUT_WELCOME_MESSAGE.attachment
         this.sendGroupMessage(peerId, groupId, message, attachment)
         return;
     }
 
     sendWakeupMessage(peerId : number, groupId : number) : void {
         this.markAsRead(peerId, groupId);
-        let message : string = VK_OUT_WAKE_UP_MESSAGE_RU.message
-        let attachment : string | undefined = VK_OUT_WAKE_UP_MESSAGE_RU.attachment;
+        let message : string = VK_OUT_WAKE_UP_MESSAGE.message
+        let attachment : string | undefined = VK_OUT_WAKE_UP_MESSAGE.attachment;
         let keyboard : Keyboard = PreparedKeyboardService.getBasicKeyboard();
         keyboard.inline = true;
 
