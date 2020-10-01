@@ -1,10 +1,21 @@
 import Domain from "../abstract/domain";
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-import {UserContactMechanism} from "./userContactMechanism";
+import {
+    Column,
+    CreateDateColumn,
+    Entity, JoinTable,
+    ManyToMany,
+    ManyToOne, OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
+import {UserContactType} from "./contact/userContactType";
 import {UserType} from "./userType";
+import UserContact from "./contact/userContact";
+import ApplicationStatus from "../applicationstatus/applicationStatus";
 
 @Entity("user")
 export default class User extends Domain {
+
     @PrimaryGeneratedColumn()
     id? : number;
 
@@ -29,23 +40,45 @@ export default class User extends Domain {
     @Column({name : "user_type", type : "enum", enum : UserType})
     type : UserType = UserType.NORMAL;
 
-    @Column({name : "contact_mechanism", type : "enum", enum : UserContactMechanism})
-    contactMechanism : UserContactMechanism
+    @OneToMany(type1 => UserContact, contact => contact.user)
+    private _contacts? : UserContact[];
 
-    @Column({name : "contact", unique : true})
-    contact : string;
+    @ManyToMany(type1 => ApplicationStatus, status => status.owners)
+    @JoinTable({
+        name: "user_application",
+        joinColumn: {name: "user_id", referencedColumnName: "id"},
+        inverseJoinColumn: {name: "application_status_id", referencedColumnName: "id"}
+    }) private _applicationStatuses?: ApplicationStatus[];
 
-
-    constructor(firstName: string, lastName: string, contactMechanism: UserContactMechanism, contact: string) {
+    constructor(firstName: string, lastName: string) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
-        this.contactMechanism = contactMechanism;
-        this.contact = contact;
     }
 
     equals(another: Domain): boolean {
         return false;
     }
 
+    get applicationStatuses(): ApplicationStatus[] {
+        if (this._applicationStatuses === undefined) {
+            this._applicationStatuses = [];
+        }
+        return this._applicationStatuses;
+    }
+
+    set applicationStatuses(value: ApplicationStatus[]) {
+        this._applicationStatuses = value;
+    }
+
+    get contacts(): UserContact[] {
+        if (this._contacts === undefined){
+            this._contacts = []
+        }
+        return this._contacts;
+    }
+
+    set contacts(value: UserContact[]) {
+        this._contacts = value;
+    }
 }

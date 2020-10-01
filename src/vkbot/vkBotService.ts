@@ -20,25 +20,30 @@ class VkBotService {
         Logger.logRequest(inputMessage);
 
         if (inputMessage.payload){
-            this._processMessagePayload(botPayload.object);
-            this._saveUser(botPayload);
+            this._saveUser(botPayload).then(e => {
+                this._processMessagePayload(botPayload.object);
+            })
             return
         }
 
         if (inputMessage.text && isMatchInUpperCase(inputMessage.text, VK_IN_MESSAGE_PREFIX_REGEX)){
-            this._processMessageText(inputMessage)
-            this._saveUser(botPayload);
-            return;
+            this._saveUser(botPayload).then(e => {
+                this._processMessageText(botPayload.object);
+            })
+            return
         }
     }
 
-    private _saveUser(botPayload : VkBotPayload) : void {
-        let userId = botPayload.object.from_id
-        if (userId){
-            VkUserService.saveNewUserByIdIfNotExists(userId).catch(reason => {
-                Logger.logError(reason);
-            })
+    private async _saveUser(botPayload : VkBotPayload) : Promise<void> {
+        try {
+            let userId = botPayload.object.from_id
+            if (userId){
+                await VkUserService.saveNewUserByIdIfNotExists(userId)
+            }
+        } catch (e){
+            Logger.logError(e);
         }
+
     }
 
     private _processMessageText(inputMessage : Message) : void {

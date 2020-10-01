@@ -2,6 +2,7 @@ import PublicNotice from "../publicnotice/publicNotice";
 import VkMessageService from "./messages/vkMessageService";
 import PublicNoticeService from "../publicnotice/publicNoticeService";
 import ApplicationStatusVisa from "../applicationstatus/applicationStatusService"
+import UserService from "../user/userService"
 import Logger from "../logger/logger"
 
 
@@ -24,6 +25,8 @@ import {
     VkBotStaticMessage
 } from "./messages/vkBotStaticMessage";
 import {ApplicationStatusType} from "../applicationstatus/applicationStatusType";
+import User from "../user/user";
+import {UserContactType} from "../user/contact/userContactType";
 
 
 class VkVisaService {
@@ -59,14 +62,36 @@ class VkVisaService {
 
         VkMessageService.sendWaitMessage(inputMessage.peer_id, inputMessage.group_id);
 
-        ApplicationStatusVisa.getVisaStatus(visaNumber).then(status => {
-            let message = this._getFormattedMessageVisaStatus(status);
+        if (inputMessage.from_id) {
+            this._processApplicationStatusWithUser(visaNumber, inputMessage);
+        } else {
+            this._processApplicationStatusWithoutUser(visaNumber, inputMessage);
+        }
+
+    }
+
+    private _processApplicationStatusWithUser(number : string, inputMessage : Message) : void {
+        let userVkId = String(inputMessage.from_id)
+
+        UserService.getUserByContact(userVkId, UserContactType.VK).then(user => {
+            return ApplicationStatusVisa.createOrUpdateApplicationStatus(number, user)
+        }).then(status => {
+            let message = this._getFormattedMessageVisaStatus(status.status);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
         }).catch(reason => {
             Logger.logError(reason);
             VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
+    }
 
+    private _processApplicationStatusWithoutUser(number : string, inputMessage : Message) : void {
+            ApplicationStatusVisa.createOrUpdateApplicationStatus(number).then(status => {
+            let message = this._getFormattedMessageVisaStatus(status.status);
+            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
+        }).catch(reason => {
+            Logger.logError(reason);
+            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
+        })
     }
 
     private _getFormattedMessagePublicNotice(notices : PublicNotice[]) : VkBotStaticMessage{

@@ -54,12 +54,14 @@ export default class App {
                 __dirname + "/czechdictionary/czechDictionaryWord.js",
                 __dirname + "/publicnotice/publicNotice.js",
                 __dirname + "/usermessage/userMessage.js",
-                __dirname + "/user/user.js"
+                __dirname + "/user/user.js",
+                __dirname + "/user/contact/userContact.js"
             ]
         }).then(() => {
             Logger.logInfo("Connected to DB")
         }).catch(e => {
-            Logger.logError("Failed to connect to DB", e)
+            Logger.logError("Failed to connect to DB")
+            Logger.logError(e)
         })
     }
 

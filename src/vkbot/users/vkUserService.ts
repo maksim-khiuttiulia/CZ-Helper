@@ -4,8 +4,9 @@ import {VkUsersPayload} from "../payloads/vkApiPayloads";
 import {VkApiMethod} from "../vkbotEnums";
 import UserService from "../../user/userService";
 import User from "../../user/user";
-import {UserContactMechanism} from "../../user/userContactMechanism";
+import {UserContactType} from "../../user/contact/userContactType";
 import Logger from "../../logger/logger"
+import UserContact from "../../user/contact/userContact";
 
 
 class VkUserService {
@@ -28,11 +29,12 @@ class VkUserService {
 
     private async _saveUserToDbIfNotExists(vkUser : VkUser, latFirstName? : string, latLastName? : string) : Promise<User> {
         let vkUserId : string = String(vkUser.id);
-        let user : User | undefined = await UserService.getUserByContact(vkUserId, UserContactMechanism.VK);
+        let user : User | undefined = await UserService.getUserByContact(vkUserId, UserContactType.VK);
         if (!user){
-            let newUser : User = new User(vkUser.first_name, vkUser.last_name, UserContactMechanism.VK, vkUserId);
+            let newUser : User = new User(vkUser.first_name, vkUser.last_name);
             newUser.latLastName = latLastName;
             newUser.latFirstName = latFirstName
+            newUser.contacts = [new UserContact(UserContactType.VK, vkUserId, newUser)]
             await UserService.saveUser(newUser);
             Logger.logInfo("Save new user from VK to DB");
             return newUser;

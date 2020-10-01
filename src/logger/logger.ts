@@ -16,7 +16,7 @@ class Logger {
             level : 'info',
             format : format.combine(
                 format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
-                format.json()
+                format.prettyPrint()
             ),
             transports: [
                 new transports.Console(),
@@ -43,7 +43,7 @@ class Logger {
     }
 
     logError(error : any, ...meta: any[]) : void {
-        this._mainLogger.error(error, meta)
+        this._mainLogger.error(error, error.stack, meta)
     }
 
     logRequest(request : any) : void {
