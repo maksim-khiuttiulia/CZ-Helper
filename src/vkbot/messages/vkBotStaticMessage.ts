@@ -46,6 +46,10 @@ export const VK_OUT_MVCR_FUNCTIONS: VkBotStaticMessage = {
     attachment: "photo-78133639_457241060"
 }
 
+export const VK_OUT_CHANGE_NAME: VkBotStaticMessage = {
+    message: "Я сменил твои имя и фамилию на: {0} {1}"
+}
+
 export const VK_OUT_MVCR_EXISTS_PUBLIC_NOTICE: VkBotStaticMessage = {
     message: "Для тебя письмо!",
     attachment: "photo-78133639_457241066"

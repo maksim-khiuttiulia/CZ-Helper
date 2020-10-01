@@ -1,7 +1,7 @@
 import Domain from "../abstract/domain";
 import {Column, Entity, PrimaryColumn} from "typeorm";
 
-@Entity("user_message")
+@Entity("prepared_messages")
 class UserMessage extends Domain {
 
     @PrimaryColumn()
@@ -9,6 +9,9 @@ class UserMessage extends Domain {
 
     @Column({name : "message"})
     message : string;
+
+    @Column({name : "attachment"})
+    attachment? : string
 
 
     constructor(message: string) {

@@ -1,9 +1,9 @@
-import {Message, Payload, VkBotPayload} from "./payloads/vkBotPayloads";
+import {NewMessage, Payload, VkBotPayload} from "./payloads/vkBotPayloads";
 import Logger from "../logger/logger"
 import VkMessageService from "./messages/vkMessageService"
 import VkBotKeyboardService from "./keyboard/vkBotKeyboardService";
 import VkUserService from "./users/vkUserService"
-import {isMatchInUpperCase} from "../utils/regexUtils";
+import {isMatchInUpperCase} from "../utils/stringUtils";
 import VkVisaService from "./vkVisaService"
 import {
     VK_IN_CHECK_PUBLIC_NOTICE_REGEX_PREFIX,
@@ -11,42 +11,32 @@ import {
     VK_IN_MESSAGE_PREFIX_REGEX,
     VK_IN_WAKE_UP_REGEX
 } from "./vkInputMessagePatterns";
+import User from "../user/user";
 
 
 class VkBotService {
 
     processInputMessage(botPayload : VkBotPayload) : void {
-        let inputMessage : Message = botPayload.object;
+        let inputMessage : NewMessage = botPayload.object;
         Logger.logRequest(inputMessage);
+        let userId = botPayload.object.from_id
 
         if (inputMessage.payload){
-            this._saveUser(botPayload).then(e => {
-                this._processMessagePayload(botPayload.object);
+            VkUserService.getOrCreateUserById(userId).then(user => {
+                this._processMessagePayload(botPayload.object, user);
             })
             return
         }
 
         if (inputMessage.text && isMatchInUpperCase(inputMessage.text, VK_IN_MESSAGE_PREFIX_REGEX)){
-            this._saveUser(botPayload).then(e => {
-                this._processMessageText(botPayload.object);
+            VkUserService.getOrCreateUserById(userId).then(user => {
+                this._processMessageText(botPayload.object, user);
             })
             return
         }
     }
 
-    private async _saveUser(botPayload : VkBotPayload) : Promise<void> {
-        try {
-            let userId = botPayload.object.from_id
-            if (userId){
-                await VkUserService.saveNewUserByIdIfNotExists(userId)
-            }
-        } catch (e){
-            Logger.logError(e);
-        }
-
-    }
-
-    private _processMessageText(inputMessage : Message) : void {
+    private _processMessageText(inputMessage : NewMessage, user : User) : void {
         inputMessage.text = inputMessage.text.toUpperCase();
         let text = inputMessage.text.toUpperCase();
         if (isMatchInUpperCase(text, VK_IN_MESSAGE_PREFIX_REGEX)){
@@ -57,18 +47,18 @@ class VkBotService {
             }
             if (isMatchInUpperCase(text, VK_IN_CHECK_PUBLIC_NOTICE_REGEX_PREFIX)) {
                 this._markAsRead(inputMessage)
-                VkVisaService.processGetPublicNoticeMessage(inputMessage);
+                VkVisaService.processGetPublicNoticeMessage(inputMessage, user);
                 return;
             }
             if (isMatchInUpperCase(text, VK_IN_CHECK_VISA_REGEX_PREFIX)) {
                 this._markAsRead(inputMessage)
-                VkVisaService.processGetVisaStatus(inputMessage);
+                VkVisaService.processGetVisaStatus(inputMessage, user);
                 return;
             }
         }
     }
 
-    private _processMessagePayload(inputMessage : Message) : void {
+    private _processMessagePayload(inputMessage : NewMessage, user : User) : void {
         this._markAsRead(inputMessage)
 
         let payload : Payload = JSON.parse(inputMessage.payload);
@@ -87,7 +77,7 @@ class VkBotService {
         }
     }
 
-    private _markAsRead(message : Message) : void {
+    private _markAsRead(message : NewMessage) : void {
         VkMessageService.markAsRead(message.peer_id, message.group_id);
     }
 }

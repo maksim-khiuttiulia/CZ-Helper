@@ -6,7 +6,7 @@ import UserService from "../user/userService"
 import Logger from "../logger/logger"
 
 
-import {Message} from "./payloads/vkBotPayloads";
+import {NewMessage} from "./payloads/vkBotPayloads";
 import {
     VK_IN_CHECK_PUBLIC_NOTICE_FIRST_NAME_GROUP,
     VK_IN_CHECK_PUBLIC_NOTICE_LAST_NAME_NAME_GROUP,
@@ -16,23 +16,25 @@ import {
 } from "./vkInputMessagePatterns";
 
 import {
+    VK_OUT_CHANGE_NAME,
     VK_OUT_ERROR,
     VK_OUT_MVCR_EXISTS_PUBLIC_NOTICE,
     VK_OUT_MVCR_NO_EXISTS_PUBLIC_NOTICE,
     VK_OUT_MVCR_VISA_APPROVED,
-    VK_OUT_MVCR_VISA_IN_PROGRESS, VK_OUT_MVCR_VISA_NOT_FOUND,
-    VK_OUT_MVCR_VISA_REJECTED, VK_OUT_WRONG_FORMAT,
+    VK_OUT_MVCR_VISA_IN_PROGRESS,
+    VK_OUT_MVCR_VISA_NOT_FOUND,
+    VK_OUT_MVCR_VISA_REJECTED,
     VkBotStaticMessage
 } from "./messages/vkBotStaticMessage";
 import {ApplicationStatusType} from "../applicationstatus/applicationStatusType";
 import User from "../user/user";
-import {UserContactType} from "../user/contact/userContactType";
+import {fillString} from "../utils/stringUtils";
 
 
 class VkVisaService {
 
 
-    processGetPublicNoticeMessage(inputMessage : Message) : void {
+    processGetPublicNoticeMessage(inputMessage : NewMessage, user : User) : void {
         let message = inputMessage.text.trim().toUpperCase()
         const regex: RegExpMatchArray | null = message.match(VK_IN_CHECK_PUBLIC_NOTICE_REGEX);
         if (regex === null) {
@@ -42,16 +44,28 @@ class VkVisaService {
         let firstName: string = regex[VK_IN_CHECK_PUBLIC_NOTICE_FIRST_NAME_GROUP];
         let lastName : string = regex[VK_IN_CHECK_PUBLIC_NOTICE_LAST_NAME_NAME_GROUP];
 
+        if (user.latLastName !== lastName && user.latFirstName != lastName) {
+            user.latLastName = lastName;
+            user.latFirstName = firstName;
+            UserService.saveUser(user).then(user => {
+                let message = VK_OUT_CHANGE_NAME.message;
+                message = fillString(message, user.latFirstName ,user.latLastName)
+                VkMessageService.sendMessage(inputMessage.peer_id, inputMessage.group_id, message);
+            }).catch(reason => {
+                Logger.logError(reason);
+            })
+        }
+
         PublicNoticeService.getActivePublicNotices(firstName, lastName).then(notices => {
             let message : VkBotStaticMessage = this._getFormattedMessagePublicNotice(notices);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment);
+            VkMessageService.sendMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment);
         }).catch(reason => {
             Logger.logError(reason);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
+            VkMessageService.sendMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
     }
 
-    processGetVisaStatus(inputMessage : Message) : void {
+    processGetVisaStatus(inputMessage : NewMessage, user : User) : void {
         let message = inputMessage.text.trim().toUpperCase()
         const regex: RegExpMatchArray | null = message.match(VK_IN_CHECK_VISA_REGEX);
         if (regex === null) {
@@ -62,37 +76,15 @@ class VkVisaService {
 
         VkMessageService.sendWaitMessage(inputMessage.peer_id, inputMessage.group_id);
 
-        if (inputMessage.from_id) {
-            this._processApplicationStatusWithUser(visaNumber, inputMessage);
-        } else {
-            this._processApplicationStatusWithoutUser(visaNumber, inputMessage);
-        }
-
-    }
-
-    private _processApplicationStatusWithUser(number : string, inputMessage : Message) : void {
-        let userVkId = String(inputMessage.from_id)
-
-        UserService.getUserByContact(userVkId, UserContactType.VK).then(user => {
-            return ApplicationStatusVisa.createOrUpdateApplicationStatus(number, user)
-        }).then(status => {
+        ApplicationStatusVisa.getApplicationStatus(visaNumber, user).then(status => {
             let message = this._getFormattedMessageVisaStatus(status.status);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
+            VkMessageService.sendMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
         }).catch(reason => {
             Logger.logError(reason);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
+            VkMessageService.sendMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
         })
     }
 
-    private _processApplicationStatusWithoutUser(number : string, inputMessage : Message) : void {
-            ApplicationStatusVisa.createOrUpdateApplicationStatus(number).then(status => {
-            let message = this._getFormattedMessageVisaStatus(status.status);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, message.message, message.attachment)
-        }).catch(reason => {
-            Logger.logError(reason);
-            VkMessageService.sendGroupMessage(inputMessage.peer_id, inputMessage.group_id, VK_OUT_ERROR.message, VK_OUT_ERROR.attachment)
-        })
-    }
 
     private _getFormattedMessagePublicNotice(notices : PublicNotice[]) : VkBotStaticMessage{
         if (notices.length === 0) {

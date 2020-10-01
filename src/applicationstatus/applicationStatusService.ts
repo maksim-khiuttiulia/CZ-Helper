@@ -26,12 +26,10 @@ class ApplicationStatusService {
         Logger.logInfo("End updating application status");
     }
 
-    async createOrUpdateApplicationStatus(number : string, user? : User) : Promise<ApplicationStatus> {
+    async getApplicationStatus(number : string, user? : User) : Promise<ApplicationStatus> {
         let applicationStatus : ApplicationStatus | undefined = await ApplicationStatusRepository.readApplicationStatus(number);
         if (applicationStatus === undefined) {
             applicationStatus = await this._readNewApplicationStatus(number);
-        } else {
-            applicationStatus = await this._updateApplicationStatus(applicationStatus);
         }
         if (user !== undefined && isNotInDomainsCollection(user, applicationStatus.owners)) {
             applicationStatus.owners.push(user);
@@ -46,19 +44,7 @@ class ApplicationStatusService {
         return applicationStatus
     }
 
-    private async _updateApplicationStatus(applicationStatus: ApplicationStatus) : Promise<ApplicationStatus> {
-        if (applicationStatus.finalValue) {
-            return applicationStatus;
-        } else {
-            let parsedApplicationStatus: ApplicationStatusType = await ApplicationStatusPageParser.getApplicationStatus(applicationStatus.applicationNumber);
 
-            applicationStatus.status = parsedApplicationStatus;
-            if (this._isFinalStatus(parsedApplicationStatus)) {
-                applicationStatus.finalValue = true;
-            }
-            return applicationStatus;
-        }
-    }
 
     private async _notifyUser(status: ApplicationStatus): Promise<void> {
 

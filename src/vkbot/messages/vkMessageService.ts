@@ -14,7 +14,7 @@ import {Keyboard} from "../keyboard/vkKeyboardDataModel";
 
 class VkMessageService {
 
-    sendGroupMessage(peer_id : number, group_id:number, message : string, attachment? : string, keyboard? : Keyboard) : void {
+    sendMessage(peer_id : number, group_id:number, message : string, attachment? : string, keyboard? : Keyboard) : void {
         let payload : VkMessagePayload = {
             random_id : Math.random() * 10000000000000000,
             peer_id : peer_id,
@@ -43,7 +43,7 @@ class VkMessageService {
     sendWelcomeMessage(peerId : number, groupId : number) : void {
         let message : string = VK_OUT_WELCOME_MESSAGE.message
         let attachment : string | undefined = VK_OUT_WELCOME_MESSAGE.attachment
-        this.sendGroupMessage(peerId, groupId, message, attachment)
+        this.sendMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -54,7 +54,7 @@ class VkMessageService {
         let keyboard : Keyboard = PreparedKeyboardService.getBasicKeyboard();
         keyboard.inline = true;
 
-        this.sendGroupMessage(peerId, groupId, message, attachment, keyboard)
+        this.sendMessage(peerId, groupId, message, attachment, keyboard)
         return;
     }
 
@@ -62,7 +62,7 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_UNKNOWN_COMMAND.message
         let attachment : string | undefined = VK_OUT_UNKNOWN_COMMAND.attachment;
-        this.sendGroupMessage(peerId, groupId, message, attachment)
+        this.sendMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -70,7 +70,7 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_WAIT.message
         let attachment : string | undefined = VK_OUT_WAIT.attachment;
-        this.sendGroupMessage(peerId, groupId, message, attachment)
+        this.sendMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -78,7 +78,7 @@ class VkMessageService {
         this.markAsRead(peerId, groupId);
         let message : string = VK_OUT_ERROR.message
         let attachment : string | undefined = VK_OUT_ERROR.attachment;
-        this.sendGroupMessage(peerId, groupId, message, attachment)
+        this.sendMessage(peerId, groupId, message, attachment)
         return;
     }
 
@@ -87,7 +87,7 @@ class VkMessageService {
         let message : string = VK_OUT_WRONG_FORMAT.message
         let attachment : string | undefined = VK_OUT_WRONG_FORMAT.attachment;
 
-        this.sendGroupMessage(peerId, groupId, message, attachment)
+        this.sendMessage(peerId, groupId, message, attachment)
         return;
     }
 

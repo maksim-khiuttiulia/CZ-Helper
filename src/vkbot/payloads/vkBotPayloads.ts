@@ -4,7 +4,7 @@ import {ButtonPayload} from "../keyboard/button/buttonPayloadType";
 export interface VkBotPayload {
     type : 'message_new' | 'message' | 'confirmation',
     secret? : string,
-    object : Message,
+    object : NewMessage,
     keyboard? : Keyboard
     group_id? : number,
 }
@@ -14,12 +14,12 @@ export interface Payload {
     button? : ButtonPayload
 }
 
-export interface Message {
+export interface NewMessage {
     id : number,
     date : number,
     out : number,
     user_id? : number,
-    from_id? : number,
+    from_id : number,
     peer_id : number,
     group_id : number,
     read_state : number,

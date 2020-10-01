@@ -16,7 +16,7 @@ import {
     STATUS_REJECTED
 } from "./applicationStatusConstants";
 import {ApplicationStatusType} from "./applicationStatusType";
-import {isMatch} from "../utils/regexUtils";
+import {isMatch} from "../utils/stringUtils";
 import PQueue from "p-queue";
 
 const puppeteer = require('puppeteer');

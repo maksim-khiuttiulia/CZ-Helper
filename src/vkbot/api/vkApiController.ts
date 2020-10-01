@@ -38,7 +38,7 @@ class VkApiController extends Controller{
 
     async getVisaStatus(request: Request, response: Response) : Promise<void> {
         let number : string = request.body["number"];
-        let status = await ApplicationStatusService.createOrUpdateApplicationStatus(number);
+        let status = await ApplicationStatusService.getApplicationStatus(number);
         response.send(status);
     }
 }

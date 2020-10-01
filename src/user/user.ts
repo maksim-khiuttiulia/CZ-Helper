@@ -15,7 +15,6 @@ import ApplicationStatus from "../applicationstatus/applicationStatus";
 
 @Entity("user")
 export default class User extends Domain {
-
     @PrimaryGeneratedColumn()
     id? : number;
 
@@ -32,10 +31,10 @@ export default class User extends Domain {
     lastName : string
 
     @Column({name : "lat_first_name"})
-    latFirstName? : string
+    private _latFirstName? : string
 
     @Column({name : "lat_last_name"})
-    latLastName? : string
+    private _latLastName? : string
 
     @Column({name : "user_type", type : "enum", enum : UserType})
     type : UserType = UserType.NORMAL;
@@ -80,5 +79,20 @@ export default class User extends Domain {
 
     set contacts(value: UserContact[]) {
         this._contacts = value;
+    }
+
+    get latLastName(): string {
+        return this._latLastName?.toUpperCase() || "";
+    }
+
+    set latLastName(value: string) {
+        this._latLastName = value.toUpperCase();
+    }
+    get latFirstName(): string {
+        return this._latFirstName?.toUpperCase() || "";
+    }
+
+    set latFirstName(value: string) {
+        this._latFirstName = value.toUpperCase();
     }
 }

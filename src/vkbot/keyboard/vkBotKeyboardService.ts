@@ -35,18 +35,18 @@ class VkBotKeyboardService {
         }
 
         if (payload === ButtonPayload.MVCR_FUNCTIONS){
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_MVCR_FUNCTIONS.message, undefined, keyboard);
+            VkMessageService.sendMessage(peerId, groupId, VK_OUT_MVCR_FUNCTIONS.message, undefined, keyboard);
             return;
         }
 
         if (payload === ButtonPayload.GO_TO_PHRASES){
             keyboard = PreparedKeyboardService.getPhraseKeyboard();
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
+            VkMessageService.sendMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
             return;
         }
         if (payload === ButtonPayload.GO_TO_INFO){
             keyboard = PreparedKeyboardService.getInformationKeyboard()
-            VkMessageService.sendGroupMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
+            VkMessageService.sendMessage(peerId, groupId, VK_OUT_CHOOSE_CATEGORY.message, undefined, keyboard)
             return;
         }
 
@@ -58,7 +58,7 @@ class VkBotKeyboardService {
         if (payload === ButtonPayload.WORD_RANDOM_WORD) {
             CzechDictionaryService.getRandomWord(WordType.WORD,WordCategory.FUNNY).then(word => {
                 let message = this._getFormattedWord(word);
-                VkMessageService.sendGroupMessage(peerId, groupId, message, undefined, keyboard)
+                VkMessageService.sendMessage(peerId, groupId, message, undefined, keyboard)
             })
             return;
         }
@@ -66,7 +66,7 @@ class VkBotKeyboardService {
         if (payload === ButtonPayload.PHRASE_RANDOM_BASIC) {
             CzechDictionaryService.getRandomWord(WordType.PHRASE, WordCategory.BASIC).then(word => {
                 let message = this._getFormattedWord(word);
-                VkMessageService.sendGroupMessage(peerId, groupId, message, undefined, keyboard)
+                VkMessageService.sendMessage(peerId, groupId, message, undefined, keyboard)
             })
             return;
         }
@@ -74,7 +74,7 @@ class VkBotKeyboardService {
         if (payload === ButtonPayload.PHRASE_RANDOM_IN_CITY) {
             CzechDictionaryService.getRandomWord(WordType.PHRASE, WordCategory.IN_CITY).then(word => {
                 let message = this._getFormattedWord(word);
-                VkMessageService.sendGroupMessage(peerId, groupId, message, undefined, keyboard)
+                VkMessageService.sendMessage(peerId, groupId, message, undefined, keyboard)
             })
             return;
         }
@@ -82,7 +82,7 @@ class VkBotKeyboardService {
         if (payload === ButtonPayload.PHRASE_RANDOM_IN_TRANSPORT) {
             CzechDictionaryService.getRandomWord(WordType.PHRASE, WordCategory.IN_TRANSPORT).then(word => {
                 let message = this._getFormattedWord(word);
-                VkMessageService.sendGroupMessage(peerId, groupId, message, undefined, keyboard)
+                VkMessageService.sendMessage(peerId, groupId, message, undefined, keyboard)
             })
             return;
         }
@@ -90,7 +90,7 @@ class VkBotKeyboardService {
         if (payload === ButtonPayload.PHRASE_RANDOM_IN_SHOP) {
             CzechDictionaryService.getRandomWord(WordType.PHRASE, WordCategory.IN_SHOP).then(word => {
                 let message = this._getFormattedWord(word);
-                VkMessageService.sendGroupMessage(peerId, groupId, message, undefined, keyboard)
+                VkMessageService.sendMessage(peerId, groupId, message, undefined, keyboard)
             })
             return;
         }
@@ -124,7 +124,7 @@ class VkBotKeyboardService {
 
 
         UserMessageService.getMessage(messageId).then(message => {
-            VkMessageService.sendGroupMessage(peerId, groupId, message.message)
+            VkMessageService.sendMessage(peerId, groupId, message.message)
         }).catch(reason => {
             Logger.logError(reason);
             VkMessageService.sendErrorMessage(peerId, groupId);
