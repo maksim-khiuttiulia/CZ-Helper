@@ -72,7 +72,7 @@ export const VK_OUT_MVCR_VISA_REJECTED: VkBotStaticMessage = {
 
 export const VK_OUT_MVCR_VISA_IN_PROGRESS: VkBotStaticMessage = {
     message: "",
-    attachment: "photo-78133639_457241058"
+    attachment: "photo-78133639_457241070"
 }
 
 export const VK_OUT_MVCR_VISA_NOT_FOUND: VkBotStaticMessage = {
